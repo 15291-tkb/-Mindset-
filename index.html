@@ -1207,6 +1207,10 @@
             border-top: 1px solid var(--border-color);
         }
 
+        body.shared-result-mode .actions-group {
+            display: none !important;
+        }
+
         .btn-restart {
             grid-column: span 2;
         }
@@ -2681,6 +2685,22 @@
             document.getElementById('bar-growth').style.width = `${gPct}%`;
             document.getElementById('bar-fixed').style.width = `${fPct}%`;
 
+            currentResultSnapshot = {
+                title,
+                subtitle: sub,
+                emoji,
+                rarity: rarityText,
+                gPct,
+                fPct,
+                summary: shareCaption,
+                desc,
+                strengths: strengthArr,
+                weaknesses: weaknessArr,
+                advices: adviceArr,
+                careers: top3,
+                dominantType
+            };
+
             // Save for replay
             currentStoryData = { storyBgClass, storyText1, storyText2, gPct, fPct };
             
@@ -2690,6 +2710,27 @@
 
         let currentStoryData = null;
         let currentShareText = '';
+        let currentResultSnapshot = null;
+
+        function encodeShareData(payload) {
+            const json = JSON.stringify(payload);
+            return btoa(encodeURIComponent(json).replace(/%([0-9A-F]{2})/g, (_, p1) => String.fromCharCode('0x' + p1)))
+                .replace(/\+/g, '-')
+                .replace(/\//g, '_')
+                .replace(/=+$/g, '');
+        }
+
+        function decodeShareData(encoded) {
+            try {
+                const b64 = encoded.replace(/-/g, '+').replace(/_/g, '/');
+                const pad = '='.repeat((4 - (b64.length % 4)) % 4);
+                const binary = atob(b64 + pad);
+                const percentEncoded = Array.from(binary).map(ch => '%' + ch.charCodeAt(0).toString(16).padStart(2, '0')).join('');
+                return JSON.parse(decodeURIComponent(percentEncoded));
+            } catch (_) {
+                return null;
+            }
+        }
 
         function playStoryAnimation() {
             if (!currentStoryData) return;
@@ -2866,16 +2907,24 @@
 
         function copyResultLink() {
             playSound('click');
-            const growthPct = document.getElementById('lbl-growth-num').textContent || '0';
-            const fixedPct = document.getElementById('lbl-fixed-num').textContent || '0';
-            const title = document.getElementById('res-title').textContent || 'Mindset Result';
-            const subtitle = document.getElementById('res-subtitle').textContent || '';
-            const emoji = document.getElementById('res-emoji').textContent || '🧠';
-            const rarity = document.getElementById('res-rarity').textContent || '';
-            const summary = currentShareText || 'มาลองเช็กสไตล์การเติบโตของตัวเองกัน';
-
-            const shareUrl = `https://15291-tkb.github.io/-Mindset-/?title=${encodeURIComponent(title)}&subtitle=${encodeURIComponent(subtitle)}&emoji=${encodeURIComponent(emoji)}&rarity=${encodeURIComponent(rarity)}&g=${encodeURIComponent(growthPct)}&f=${encodeURIComponent(fixedPct)}&summary=${encodeURIComponent(summary)}`;
-            const textToCopy = `ผล Mindset ของฉัน: ${title}\nGrowth ${growthPct}% | Fixed ${fixedPct}%\n${summary}\nดูผลของฉัน: ${shareUrl}`;
+            const fallbackSnapshot = {
+                title: document.getElementById('res-title').textContent || 'Mindset Result',
+                subtitle: document.getElementById('res-subtitle').textContent || '',
+                emoji: document.getElementById('res-emoji').textContent || '🧠',
+                rarity: document.getElementById('res-rarity').textContent || '',
+                gPct: Number(document.getElementById('lbl-growth-num').textContent || '0'),
+                fPct: Number(document.getElementById('lbl-fixed-num').textContent || '0'),
+                summary: currentShareText || 'มาลองเช็กสไตล์การเติบโตของตัวเองกัน',
+                desc: document.getElementById('res-desc').textContent || '',
+                strengths: Array.from(document.querySelectorAll('#res-strengths li')).map(li => li.textContent),
+                weaknesses: Array.from(document.querySelectorAll('#res-weakness li')).map(li => li.textContent),
+                advices: Array.from(document.querySelectorAll('#res-advice li')).map(li => li.textContent),
+                careers: [],
+                dominantType: document.getElementById('res-dominant').textContent || 'Balanced'
+            };
+            const payload = currentResultSnapshot || fallbackSnapshot;
+            const shareUrl = `https://15291-tkb.github.io/-Mindset-/?data=${encodeURIComponent(encodeShareData(payload))}`;
+            const textToCopy = `ผล Mindset ของฉัน: ${payload.title}\nGrowth ${payload.gPct}% | Fixed ${payload.fPct}%\n${payload.summary}\nดูผลของฉัน: ${shareUrl}`;
 
             navigator.clipboard.writeText(textToCopy).then(() => {
                 alert('คัดลอกลิงก์ผลลัพธ์เรียบร้อยแล้ว!');
@@ -2886,26 +2935,40 @@
 
         function loadSharedResultFromUrl() {
             const params = new URLSearchParams(window.location.search);
-            if (!params.has('g') || !params.has('f') || !params.has('title')) return false;
+            let payload = null;
+            if (params.has('data')) {
+                payload = decodeShareData(params.get('data'));
+            } else if (params.has('g') && params.has('f') && params.has('title')) {
+                payload = {
+                    title: params.get('title') || 'Mindset Result',
+                    subtitle: params.get('subtitle') || 'ผลลัพธ์จากการแชร์',
+                    emoji: params.get('emoji') || '🧠',
+                    rarity: params.get('rarity') || '📌 Shared Result',
+                    gPct: Math.max(0, Math.min(100, Number(params.get('g')) || 0)),
+                    fPct: Math.max(0, Math.min(100, Number(params.get('f')) || 0)),
+                    summary: params.get('summary') || 'ผลลัพธ์ที่ถูกแชร์จากเพื่อนของคุณ',
+                    desc: 'นี่คือผลลัพธ์ที่ถูกแชร์จากเพื่อนของคุณ ลองทำแบบทดสอบเพื่อรับคำแนะนำเฉพาะตัวของคุณเอง',
+                    strengths: [],
+                    weaknesses: [],
+                    advices: [],
+                    careers: []
+                };
+            }
+            if (!payload) return false;
 
-            const title = params.get('title') || 'Mindset Result';
-            const subtitle = params.get('subtitle') || 'ผลลัพธ์จากการแชร์';
-            const emoji = params.get('emoji') || '🧠';
-            const rarity = params.get('rarity') || '📌 Shared Result';
-            const summary = params.get('summary') || 'ผลลัพธ์ที่ถูกแชร์จากเพื่อนของคุณ';
-
-            const gPct = Math.max(0, Math.min(100, Number(params.get('g')) || 0));
-            const fPct = Math.max(0, Math.min(100, Number(params.get('f')) || 0));
-            const dominantType = gPct > fPct ? 'Growth' : (fPct > gPct ? 'Fixed' : 'Balanced');
+            const gPct = Math.max(0, Math.min(100, Number(payload.gPct) || 0));
+            const fPct = Math.max(0, Math.min(100, Number(payload.fPct) || 0));
+            const dominantType = payload.dominantType || (gPct > fPct ? 'Growth' : (fPct > gPct ? 'Fixed' : 'Balanced'));
             const resultTheme = dominantType === 'Growth' ? 'theme-growth' : (dominantType === 'Fixed' ? 'theme-fixed' : 'theme-balanced');
             const card = document.getElementById('capture-card');
             card.classList.remove('theme-growth', 'theme-fixed', 'theme-balanced');
             card.classList.add(resultTheme);
+            document.body.classList.add('shared-result-mode');
 
-            document.getElementById('res-title').textContent = title;
-            document.getElementById('res-subtitle').textContent = subtitle;
-            document.getElementById('res-emoji').textContent = emoji;
-            document.getElementById('res-rarity').textContent = rarity;
+            document.getElementById('res-title').textContent = payload.title || 'Mindset Result';
+            document.getElementById('res-subtitle').textContent = payload.subtitle || 'ผลลัพธ์จากการแชร์';
+            document.getElementById('res-emoji').textContent = payload.emoji || '🧠';
+            document.getElementById('res-rarity').textContent = payload.rarity || '📌 Shared Result';
             document.getElementById('res-txt-g').textContent = gPct;
             document.getElementById('res-txt-f').textContent = fPct;
             document.getElementById('lbl-growth-num').textContent = gPct;
@@ -2913,17 +2976,31 @@
             document.getElementById('res-dominant').textContent = dominantType;
             document.getElementById('bar-growth').style.width = `${gPct}%`;
             document.getElementById('bar-fixed').style.width = `${fPct}%`;
-            document.getElementById('res-share-caption').textContent = summary;
+            document.getElementById('res-share-caption').textContent = payload.summary || 'ผลลัพธ์ที่ถูกแชร์จากเพื่อนของคุณ';
             document.getElementById('res-share-tags').innerHTML = `
                 <span class="share-tag ${gPct >= fPct ? 'g' : 'f'}">${gPct >= fPct ? 'Growth เด่น' : 'Fixed เด่น'}</span>
                 <span class="share-tag mix">แชร์ผลลัพธ์</span>
             `;
-            currentShareText = summary;
+            currentShareText = payload.summary || '';
+            currentResultSnapshot = payload;
 
-            const descEl = document.getElementById('res-desc');
-            if (descEl && !descEl.textContent.trim()) {
-                descEl.textContent = 'นี่คือผลลัพธ์ที่ถูกแชร์จากเพื่อนของคุณ ลองทำแบบทดสอบเพื่อรับคำแนะนำเฉพาะตัวของคุณเอง';
-            }
+            document.getElementById('res-desc').textContent = payload.desc || 'นี่คือผลลัพธ์ที่ถูกแชร์จากเพื่อนของคุณ ลองทำแบบทดสอบเพื่อรับคำแนะนำเฉพาะตัวของคุณเอง';
+            document.getElementById('res-strengths').innerHTML = (payload.strengths || []).map(s => `<li>${s}</li>`).join('');
+            document.getElementById('res-weakness').innerHTML = (payload.weaknesses || []).map(w => `<li>${w}</li>`).join('');
+            document.getElementById('res-advice').innerHTML = (payload.advices || []).map(a => `<li>${a}</li>`).join('');
+            document.getElementById('res-careers').innerHTML = (payload.careers || []).map(c => `
+                <div class="career-card">
+                    <div class="career-icon">${c.icon || '💼'}</div>
+                    <div class="career-info">
+                        <div class="career-name">${c.name || '-'}</div>
+                        <div class="career-reason">${c.desc || ''}</div>
+                        <div class="career-match-bar" style="margin-top: 5px;">
+                            <div class="career-match-fill" style="width: ${Math.round(c.match || 0)}%"></div>
+                        </div>
+                    </div>
+                    <div style="font-weight:700; color:var(--primary); font-size:0.9rem">${Math.round(c.match || 0)}%</div>
+                </div>
+            `).join('');
 
             const overlay = document.getElementById('story-overlay');
             overlay.classList.add('hidden');
