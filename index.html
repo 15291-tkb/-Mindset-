@@ -2561,7 +2561,7 @@
             window.requestAnimationFrame(step);
         }
 
-        function calculateEngine() {
+        function calculateEngine(skipStoryAnimation = false) {
             const maxScore = 20 * 5; // 20 Qs * 5 max weight = 100 
             const g = state.scores.g;
             const f = state.scores.f;
@@ -2703,7 +2703,20 @@
 
             // Save for replay
             currentStoryData = { storyBgClass, storyText1, storyText2, gPct, fPct };
-            
+
+            if (skipStoryAnimation) {
+                document.getElementById("res-txt-f").innerText = fPct;
+                document.getElementById("res-txt-g").innerText = gPct;
+                document.getElementById("lbl-growth-num").innerText = gPct;
+                document.getElementById("lbl-fixed-num").innerText = fPct;
+                const overlay = document.getElementById('story-overlay');
+                const card = document.getElementById('capture-card');
+                overlay.classList.add('hidden');
+                card.classList.add('revealed');
+                showScreen('screen-result');
+                return;
+            }
+
             // Prepare Story Animation System
             playStoryAnimation();
         }
@@ -2907,24 +2920,12 @@
 
         function copyResultLink() {
             playSound('click');
-            const fallbackSnapshot = {
-                title: document.getElementById('res-title').textContent || 'Mindset Result',
-                subtitle: document.getElementById('res-subtitle').textContent || '',
-                emoji: document.getElementById('res-emoji').textContent || '🧠',
-                rarity: document.getElementById('res-rarity').textContent || '',
-                gPct: Number(document.getElementById('lbl-growth-num').textContent || '0'),
-                fPct: Number(document.getElementById('lbl-fixed-num').textContent || '0'),
-                summary: currentShareText || 'มาลองเช็กสไตล์การเติบโตของตัวเองกัน',
-                desc: document.getElementById('res-desc').textContent || '',
-                strengths: Array.from(document.querySelectorAll('#res-strengths li')).map(li => li.textContent),
-                weaknesses: Array.from(document.querySelectorAll('#res-weakness li')).map(li => li.textContent),
-                advices: Array.from(document.querySelectorAll('#res-advice li')).map(li => li.textContent),
-                careers: [],
-                dominantType: document.getElementById('res-dominant').textContent || 'Balanced'
-            };
-            const payload = currentResultSnapshot || fallbackSnapshot;
-            const shareUrl = `https://15291-tkb.github.io/-Mindset-/?data=${encodeURIComponent(encodeShareData(payload))}`;
-            const textToCopy = `ผล Mindset ของฉัน: ${payload.title}\nGrowth ${payload.gPct}% | Fixed ${payload.fPct}%\n${payload.summary}\nดูผลของฉัน: ${shareUrl}`;
+            const growthPct = Number(document.getElementById('lbl-growth-num').textContent || '0');
+            const fixedPct = Number(document.getElementById('lbl-fixed-num').textContent || '0');
+            const title = document.getElementById('res-title').textContent || 'Mindset Result';
+            const summary = currentShareText || 'มาลองเช็กสไตล์การเติบโตของตัวเองกัน';
+            const shareUrl = `https://15291-tkb.github.io/-Mindset-/?g=${growthPct}&f=${fixedPct}`;
+            const textToCopy = `ผล Mindset ของฉัน: ${title}\nGrowth ${growthPct}% | Fixed ${fixedPct}%\n${summary}\nดูผลของฉัน: ${shareUrl}`;
 
             navigator.clipboard.writeText(textToCopy).then(() => {
                 alert('คัดลอกลิงก์ผลลัพธ์เรียบร้อยแล้ว!');
@@ -2935,77 +2936,25 @@
 
         function loadSharedResultFromUrl() {
             const params = new URLSearchParams(window.location.search);
-            let payload = null;
-            if (params.has('data')) {
-                payload = decodeShareData(params.get('data'));
-            } else if (params.has('g') && params.has('f') && params.has('title')) {
-                payload = {
-                    title: params.get('title') || 'Mindset Result',
-                    subtitle: params.get('subtitle') || 'ผลลัพธ์จากการแชร์',
-                    emoji: params.get('emoji') || '🧠',
-                    rarity: params.get('rarity') || '📌 Shared Result',
-                    gPct: Math.max(0, Math.min(100, Number(params.get('g')) || 0)),
-                    fPct: Math.max(0, Math.min(100, Number(params.get('f')) || 0)),
-                    summary: params.get('summary') || 'ผลลัพธ์ที่ถูกแชร์จากเพื่อนของคุณ',
-                    desc: 'นี่คือผลลัพธ์ที่ถูกแชร์จากเพื่อนของคุณ ลองทำแบบทดสอบเพื่อรับคำแนะนำเฉพาะตัวของคุณเอง',
-                    strengths: [],
-                    weaknesses: [],
-                    advices: [],
-                    careers: []
-                };
+            let gPct = null;
+            let fPct = null;
+
+            if (params.has('g') && params.has('f')) {
+                gPct = Math.max(0, Math.min(100, Number(params.get('g')) || 0));
+                fPct = Math.max(0, Math.min(100, Number(params.get('f')) || 0));
+            } else if (params.has('data')) {
+                const payload = decodeShareData(params.get('data'));
+                if (payload) {
+                    gPct = Math.max(0, Math.min(100, Number(payload.gPct) || 0));
+                    fPct = Math.max(0, Math.min(100, Number(payload.fPct) || 0));
+                }
             }
-            if (!payload) return false;
+            if (gPct === null || fPct === null) return false;
 
-            const gPct = Math.max(0, Math.min(100, Number(payload.gPct) || 0));
-            const fPct = Math.max(0, Math.min(100, Number(payload.fPct) || 0));
-            const dominantType = payload.dominantType || (gPct > fPct ? 'Growth' : (fPct > gPct ? 'Fixed' : 'Balanced'));
-            const resultTheme = dominantType === 'Growth' ? 'theme-growth' : (dominantType === 'Fixed' ? 'theme-fixed' : 'theme-balanced');
-            const card = document.getElementById('capture-card');
-            card.classList.remove('theme-growth', 'theme-fixed', 'theme-balanced');
-            card.classList.add(resultTheme);
             document.body.classList.add('shared-result-mode');
-
-            document.getElementById('res-title').textContent = payload.title || 'Mindset Result';
-            document.getElementById('res-subtitle').textContent = payload.subtitle || 'ผลลัพธ์จากการแชร์';
-            document.getElementById('res-emoji').textContent = payload.emoji || '🧠';
-            document.getElementById('res-rarity').textContent = payload.rarity || '📌 Shared Result';
-            document.getElementById('res-txt-g').textContent = gPct;
-            document.getElementById('res-txt-f').textContent = fPct;
-            document.getElementById('lbl-growth-num').textContent = gPct;
-            document.getElementById('lbl-fixed-num').textContent = fPct;
-            document.getElementById('res-dominant').textContent = dominantType;
-            document.getElementById('bar-growth').style.width = `${gPct}%`;
-            document.getElementById('bar-fixed').style.width = `${fPct}%`;
-            document.getElementById('res-share-caption').textContent = payload.summary || 'ผลลัพธ์ที่ถูกแชร์จากเพื่อนของคุณ';
-            document.getElementById('res-share-tags').innerHTML = `
-                <span class="share-tag ${gPct >= fPct ? 'g' : 'f'}">${gPct >= fPct ? 'Growth เด่น' : 'Fixed เด่น'}</span>
-                <span class="share-tag mix">แชร์ผลลัพธ์</span>
-            `;
-            currentShareText = payload.summary || '';
-            currentResultSnapshot = payload;
-
-            document.getElementById('res-desc').textContent = payload.desc || 'นี่คือผลลัพธ์ที่ถูกแชร์จากเพื่อนของคุณ ลองทำแบบทดสอบเพื่อรับคำแนะนำเฉพาะตัวของคุณเอง';
-            document.getElementById('res-strengths').innerHTML = (payload.strengths || []).map(s => `<li>${s}</li>`).join('');
-            document.getElementById('res-weakness').innerHTML = (payload.weaknesses || []).map(w => `<li>${w}</li>`).join('');
-            document.getElementById('res-advice').innerHTML = (payload.advices || []).map(a => `<li>${a}</li>`).join('');
-            document.getElementById('res-careers').innerHTML = (payload.careers || []).map(c => `
-                <div class="career-card">
-                    <div class="career-icon">${c.icon || '💼'}</div>
-                    <div class="career-info">
-                        <div class="career-name">${c.name || '-'}</div>
-                        <div class="career-reason">${c.desc || ''}</div>
-                        <div class="career-match-bar" style="margin-top: 5px;">
-                            <div class="career-match-fill" style="width: ${Math.round(c.match || 0)}%"></div>
-                        </div>
-                    </div>
-                    <div style="font-weight:700; color:var(--primary); font-size:0.9rem">${Math.round(c.match || 0)}%</div>
-                </div>
-            `).join('');
-
-            const overlay = document.getElementById('story-overlay');
-            overlay.classList.add('hidden');
-            card.classList.add('revealed');
-            showScreen('screen-result');
+            state.scores.g = gPct;
+            state.scores.f = fPct;
+            calculateEngine(true);
             return true;
         }
 
