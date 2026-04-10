@@ -781,14 +781,29 @@
             /* For save to image capture */
             border-radius: 24px;
             margin: 20px auto;
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 32px 70px rgba(2, 6, 23, 0.45);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            position: relative;
+        }
+
+        #screen-result .card-container::after {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: 24px;
+            pointer-events: none;
+            border: 1px solid rgba(148, 163, 184, 0.16);
+            mix-blend-mode: screen;
         }
 
         .result-capture-area {
             background: var(--card-bg);
             padding: 30px 20px;
             position: relative;
-            background-image: linear-gradient(180deg, var(--card-bg) 0%, rgba(15, 15, 26, 0.95) 100%);
+            background-image:
+                radial-gradient(circle at 5% 10%, rgba(16, 185, 129, 0.2) 0%, transparent 30%),
+                radial-gradient(circle at 95% 20%, rgba(59, 130, 246, 0.2) 0%, transparent 35%),
+                linear-gradient(180deg, rgba(15, 23, 42, 0.98) 0%, rgba(15, 15, 26, 0.95) 55%, rgba(2, 6, 23, 0.98) 100%);
         }
 
         .result-capture-area::before {
@@ -798,7 +813,18 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-image: radial-gradient(circle at top, rgba(124, 58, 237, 0.15), transparent 60%);
+            background-image: radial-gradient(circle at top, rgba(124, 58, 237, 0.2), transparent 60%);
+            z-index: 0;
+        }
+
+        .result-capture-area::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            background-image: radial-gradient(rgba(255, 255, 255, 0.05) 0.8px, transparent 0.8px);
+            background-size: 3px 3px;
+            opacity: 0.08;
             z-index: 0;
         }
 
@@ -810,6 +836,11 @@
         .hero-section {
             text-align: center;
             margin-bottom: 20px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 16px;
+            padding: 16px 12px;
+            backdrop-filter: blur(4px);
         }
 
         .badge-rarity {
@@ -848,10 +879,11 @@
         }
 
         .result-title {
-            font-size: 1.8rem;
+            font-size: 1.9rem;
             font-weight: 800;
             margin-bottom: 5px;
             line-height: 1.1;
+            letter-spacing: 0.2px;
         }
 
         /* Dual Progress / Spectrum */
@@ -905,17 +937,18 @@
         }
 
         .share-highlight {
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.14), rgba(16, 185, 129, 0.14));
-            border: 1px solid rgba(59, 130, 246, 0.35);
+            background: linear-gradient(140deg, rgba(59, 130, 246, 0.2), rgba(16, 185, 129, 0.2));
+            border: 1px solid rgba(125, 211, 252, 0.45);
             border-radius: 14px;
-            padding: 14px;
-            margin-bottom: 14px;
+            padding: 15px;
+            margin-bottom: 16px;
+            box-shadow: 0 8px 20px rgba(2, 6, 23, 0.25);
         }
 
         .share-highlight-title {
             font-weight: 800;
             margin-bottom: 8px;
-            font-size: 0.95rem;
+            font-size: 0.98rem;
             color: var(--text-main);
         }
 
@@ -969,11 +1002,12 @@
 
         /* Generic Section Card */
         .result-section {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--border-color);
+            background: rgba(15, 23, 42, 0.48);
+            border: 1px solid rgba(148, 163, 184, 0.2);
             border-radius: 12px;
             padding: 15px;
             margin-bottom: 12px;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
         }
 
         .sec-title {
@@ -1104,7 +1138,7 @@
             text-align: center;
             font-size: 0.75rem;
             color: var(--text-muted);
-            opacity: 0.5;
+            opacity: 0.78;
             margin-top: 10px;
         }
 
@@ -1539,11 +1573,11 @@
 
                         <!-- A. Identity summary -->
                         <div style="text-align: center; margin-bottom: 20px; font-size: 1.1rem; font-weight: 700;" class="text-gradient res-full-width">
-                            มี Fixed <span id="res-txt-f">0</span>% และ Growth <span id="res-txt-g">0</span>%
+                            DNA ความคิดของคุณ: Growth <span id="res-txt-g">0</span>% • Fixed <span id="res-txt-f">0</span>%
                         </div>
 
                         <div class="share-highlight res-full-width">
-                            <div class="share-highlight-title">📣 โหมดน่าแชร์ของคุณ</div>
+                            <div class="share-highlight-title">📣 แคปชันพร้อมแชร์</div>
                             <div class="share-highlight-caption" id="res-share-caption">กำลังวิเคราะห์สไตล์การเติบโตของคุณ...</div>
                             <div class="share-tags" id="res-share-tags"></div>
                         </div>
@@ -2453,8 +2487,8 @@
                 strengthArr = ["เรียนรู้เร็ว ไม่หยุดนิ่ง", "ปรับตัวเก่งในสถานการณ์วิกฤต", "เป็นแรงบันดาลใจให้คนรอบข้างบ่อยๆ"];
                 weaknessArr = ["บางครั้งคุณกดดันตัวเองมากไปจนลืมพักผ่อน", "จู้จี้หรือคาดหวังสูงกับเพื่อนร่วมงานโดยไม่รู้ตัว"];
                 adviceArr = ["เว้นระยะให้ตัวเองพักเหนื่อยบ้าง ความสำเร็จไม่จำเป็นต้องรีบเสมอไป", "ระวังการด่วนตัดสินใจคนที่เรียนรู้ช้ากว่า พยายามเข้าใจจังหวะของคนอื่น", "ฉลองเป้าหมายเล็กๆ (Small wins) รอดูกระบวนการมากกว่าตัวเลขอาร์โอไอผลลัพธ์"];
-                shareCaption = "ฉันเป็นสายพัฒนาตัวเองแบบสุดพลัง ชอบเรียนรู้ ชอบลอง และพร้อมเติบโตทุกวัน";
-                shareTags = ["Growth สูงมาก", "พลังบวก", "กล้าลองสิ่งใหม่"];
+                shareCaption = "ฉันคือสายเติบโตเต็มพิกัด เปลี่ยนความท้าทายให้เป็นพลัง และไม่หยุดอัปเกรดตัวเอง";
+                shareTags = ["Growth ระดับสูง", "ใจนักพัฒนา", "แรงบันดาลใจทีม"];
             } else if (gPct >= 60) {
                 storyBgClass = "bg-growth";
                 storyText1 = "โลกกว้างใบนี้... ยังมีอะไรให้ไขว่คว้าอีกมาก...";
@@ -2464,8 +2498,8 @@
                 strengthArr = ["เปิดรับคำวิจารณ์เพื่อนำมาพัฒนา", "ไม่ยอมแพ้เมื่อเจอโจทย์ที่ยากลิบลิ่ว", "มีความสัมพันธ์ที่ดีกับเพื่อนร่วมงานเพราะอีโก้ต่ำ"];
                 weaknessArr = ["ลึกๆ คุณยังเผลอเปรียบเทียบตัวเองกับคนอื่นทำให้ไขว้เขว", "บางทีก็หมดพลังงานง่ายๆ ถ้าเจอเสียงวิจารณ์ที่รุนแรงเกินไป"];
                 adviceArr = ["โฟกัสที่การเติบโตของตัวเองเทียบกับเมื่อวานก็พอ เลิกมองคนอื่น", "กล้าที่จะลองทำสิ่งที่เสี่ยงกว่าที่เป็นอยู่", "หา Mentor เก่งๆ ไว้คอยชี้แนะ จะช่วยให้คุณก้าวเร็วขึ้นและมั่นใจ"];
-                shareCaption = "ฉันเป็นสายเติบโตแบบบาลานซ์ เปิดใจเรียนรู้และพร้อมค่อยๆ อัปเกรดตัวเองให้ดีขึ้น";
-                shareTags = ["Growth เด่น", "ใจเปิดรับ", "พัฒนาต่อเนื่อง"];
+                shareCaption = "ฉันเป็นสายเติบโตแบบมั่นคง เปิดใจเรียนรู้ พร้อมพัฒนาตัวเองให้ดีขึ้นทุกช่วงเวลา";
+                shareTags = ["Growth เด่น", "เรียนรู้ต่อเนื่อง", "พลังบวกชัดเจน"];
             } else if (fPct >= 60) {
                 storyBgClass = "bg-fixed";
                 storyText1 = "ข้อมูลต้องแม่นยำ... ความเป็นไปได้ต้องจับต้องได้ 100%...";
@@ -2475,8 +2509,8 @@
                 strengthArr = ["มีความเสถียร ซื่อตรงต่อกฎเกณฑ์", "ตรวจสอบอย่างรอบคอบก่อนลงมือทำเสมอ", "มีความรับผิดชอบสูงในงานรูทีนที่คุ้นเคย"];
                 weaknessArr = ["ปฏิเสธโอกาสดีๆ เพียงเพราะกลัวทำออกมาไม่เพอร์เฟกต์", "มองปัญหาว่าเป็นข้อจำกัดที่ข้ามไม่ได้ และเสียกำลังใจเร็ว"];
                 adviceArr = ["อนุญาตให้ตัวเองทำพลาดได้บ้าง ความผิดพลาดคือการเรียนรู้", "เปลี่ยนคำว่า 'ทำไม่ได้' เป็นคำว่า 'ยังทำไม่ได้ในตอนนี้'", "โฟกัสที่ความพยายามระหว่างทาง มากกว่าเน้นแต่เกรดหรือผลลัพธ์สุดท้าย"];
-                shareCaption = "ฉันเป็นสายมั่นคง วางแผนดี รอบคอบ และพร้อมพัฒนาแบบค่อยเป็นค่อยไปในจังหวะที่ใช่";
-                shareTags = ["Fixed เด่น", "คิดรอบคอบ", "มั่นคงน่าเชื่อถือ"];
+                shareCaption = "ฉันเป็นสายรอบคอบ วางแผนเก่ง มั่นคงน่าเชื่อถือ และกำลังเติบโตในจังหวะที่เหมาะกับตัวเอง";
+                shareTags = ["Fixed เด่น", "วางแผนเป็นระบบ", "เสถียรภาพสูง"];
             } else {
                 storyBgClass = "bg-mixed";
                 storyText1 = "ความเสี่ยงที่คำนวณมาอย่างดี... ผสมผสานกับการเรียนรู้ใหม่ๆ...";
@@ -2486,8 +2520,8 @@
                 strengthArr = ["มีเหตุมีผล รู้ว่าเมื่อไหร่ควรลุย หรือเมื่อไหร่ควรถอย", "ประเมินความสามารถตัวเองได้แม่นยำ ไม่อีโก้จัด", "บริหารความเสี่ยงเก่งมาก"];
                 weaknessArr = ["การตีกรอบความสนใจแค่เรื่องเดิมๆ ทำให้พลาดโอกาสหรือสกิลใหม่ในระยะยาว", "อาจจะสับสนสไตล์ตัวเองในบางเวลา เมื่อเจอการเปลี่ยนแปลงกะทันหัน"];
                 adviceArr = ["ลองหยิบจับงานอดิเรกนอกเหนือความสนใจเดิมๆ สัก 1 อย่าง", "ลดการตั้งกำแพงเมื่อจำเป็นต้องเรียนสกิลที่คุณมองว่า 'ไม่ใช่ทาง'", "เชื่อมั่นในศักยภาพสมองตัวเองให้มากขึ้น ว่าคุณฝึกดัดนิสัยได้"];
-                shareCaption = "ฉันเป็นสายสมดุล รู้จังหวะเดินหน้าและถอยอย่างพอดี จัดการชีวิตได้ยืดหยุ่น";
-                shareTags = ["บาลานซ์ดี", "ยืดหยุ่น", "คิดเป็นระบบ"];
+                shareCaption = "ฉันคือสายสมดุล รู้จังหวะเดินหน้าและพักอย่างพอดี ใช้เหตุผลและความยืดหยุ่นได้ดี";
+                shareTags = ["Balanced เด่น", "ยืดหยุ่นสูง", "คิดเป็นระบบ"];
             }
 
             // Set UI
@@ -2729,24 +2763,72 @@
 
         function copyResultLink() {
             playSound('click');
-            const growthPct = document.getElementById('lbl-growth-num').textContent;
-            const fixedPct = document.getElementById('lbl-fixed-num').textContent;
-            const title = document.getElementById('res-title').textContent;
-            const shareSummary = currentShareText || 'มาลองเช็กสไตล์การเติบโตของตัวเองกัน';
-            const textToCopy = `ผล Mindset ของฉัน: ${title}\nGrowth ${growthPct}% | Fixed ${fixedPct}%\n${shareSummary}\n#Mindset #GrowthMindset #แบบทดสอบสนุกๆ`;
+            const growthPct = document.getElementById('lbl-growth-num').textContent || '0';
+            const fixedPct = document.getElementById('lbl-fixed-num').textContent || '0';
+            const title = document.getElementById('res-title').textContent || 'Mindset Result';
+            const subtitle = document.getElementById('res-subtitle').textContent || '';
+            const emoji = document.getElementById('res-emoji').textContent || '🧠';
+            const rarity = document.getElementById('res-rarity').textContent || '';
+            const summary = currentShareText || 'มาลองเช็กสไตล์การเติบโตของตัวเองกัน';
+
+            const shareUrl = `https://15291-tkb.github.io/-Mindset-/?title=${encodeURIComponent(title)}&subtitle=${encodeURIComponent(subtitle)}&emoji=${encodeURIComponent(emoji)}&rarity=${encodeURIComponent(rarity)}&g=${encodeURIComponent(growthPct)}&f=${encodeURIComponent(fixedPct)}&summary=${encodeURIComponent(summary)}`;
+            const textToCopy = `ผล Mindset ของฉัน: ${title}\nGrowth ${growthPct}% | Fixed ${fixedPct}%\n${summary}\nดูผลของฉัน: ${shareUrl}`;
 
             navigator.clipboard.writeText(textToCopy).then(() => {
-                alert('คัดลอกข้อตวามสรุปผลเรียบร้อยแล้ว!');
+                alert('คัดลอกลิงก์ผลลัพธ์เรียบร้อยแล้ว!');
             }).catch(err => {
                 alert('ไม่สามารถคัดลอกได้ ระบบอาจไม่รองรับ');
             });
         }
 
+        function loadSharedResultFromUrl() {
+            const params = new URLSearchParams(window.location.search);
+            if (!params.has('g') || !params.has('f') || !params.has('title')) return false;
+
+            const title = params.get('title') || 'Mindset Result';
+            const subtitle = params.get('subtitle') || 'ผลลัพธ์จากการแชร์';
+            const emoji = params.get('emoji') || '🧠';
+            const rarity = params.get('rarity') || '📌 Shared Result';
+            const summary = params.get('summary') || 'ผลลัพธ์ที่ถูกแชร์จากเพื่อนของคุณ';
+
+            const gPct = Math.max(0, Math.min(100, Number(params.get('g')) || 0));
+            const fPct = Math.max(0, Math.min(100, Number(params.get('f')) || 0));
+
+            document.getElementById('res-title').textContent = title;
+            document.getElementById('res-subtitle').textContent = subtitle;
+            document.getElementById('res-emoji').textContent = emoji;
+            document.getElementById('res-rarity').textContent = rarity;
+            document.getElementById('res-txt-g').textContent = gPct;
+            document.getElementById('res-txt-f').textContent = fPct;
+            document.getElementById('lbl-growth-num').textContent = gPct;
+            document.getElementById('lbl-fixed-num').textContent = fPct;
+            document.getElementById('bar-growth').style.width = `${gPct}%`;
+            document.getElementById('bar-fixed').style.width = `${fPct}%`;
+            document.getElementById('res-share-caption').textContent = summary;
+            document.getElementById('res-share-tags').innerHTML = `
+                <span class="share-tag ${gPct >= fPct ? 'g' : 'f'}">${gPct >= fPct ? 'Growth เด่น' : 'Fixed เด่น'}</span>
+                <span class="share-tag mix">แชร์ผลลัพธ์</span>
+            `;
+            currentShareText = summary;
+
+            const descEl = document.getElementById('res-desc');
+            if (descEl && !descEl.textContent.trim()) {
+                descEl.textContent = 'นี่คือผลลัพธ์ที่ถูกแชร์จากเพื่อนของคุณ ลองทำแบบทดสอบเพื่อรับคำแนะนำเฉพาะตัวของคุณเอง';
+            }
+
+            const card = document.getElementById('capture-card');
+            const overlay = document.getElementById('story-overlay');
+            overlay.classList.add('hidden');
+            card.classList.add('revealed');
+            showScreen('screen-result');
+            return true;
+        }
+
         // Initialize App
         window.addEventListener('DOMContentLoaded', () => {
             applySettings();
-            // Start at Home
-            showScreen('screen-start');
+            const hasSharedResult = loadSharedResultFromUrl();
+            if (!hasSharedResult) showScreen('screen-start');
         });
 
     </script>
