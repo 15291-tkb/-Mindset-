@@ -2702,7 +2702,7 @@
             };
 
             // Save for replay
-            currentStoryData = { storyBgClass, storyText1, storyText2, gPct, fPct };
+            currentStoryData = { storyBgClass, storyText1, storyText2, gPct, fPct, dominantType };
 
             if (skipStoryAnimation) {
                 document.getElementById("res-txt-f").innerText = fPct;
@@ -2747,7 +2747,7 @@
 
         function playStoryAnimation() {
             if (!currentStoryData) return;
-            const { storyBgClass, storyText1, storyText2, gPct, fPct } = currentStoryData;
+            const { storyBgClass, storyText1, storyText2, gPct, fPct, dominantType } = currentStoryData;
 
             showScreen('screen-result');
             
@@ -2805,6 +2805,7 @@
                             animateValue("res-txt-g", 0, gPct, 1500);
                             animateValue("lbl-growth-num", 0, gPct, 1500);
                             animateValue("lbl-fixed-num", 0, fPct, 1500);
+                            document.getElementById("res-dominant").innerText = dominantType || (gPct > fPct ? 'Growth' : (fPct > gPct ? 'Fixed' : 'Balanced'));
                         }, 500);
                     }, 100);
                 }, 800); // flash hold duration
