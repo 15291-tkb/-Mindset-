@@ -1,0 +1,2672 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>คุณมี Mindset แบบไหน? Growth หรือ Fixed?</title>
+    <!-- Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Thai:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <!-- html2canvas -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <style>
+        /* CSS Variables & Design System */
+        :root {
+            /* Theme: Dark (Default) */
+            --bg-color: #0f0f1a;
+            --card-bg: #1a1a2e;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --primary: #7c3aed;
+            --primary-hover: #6d28d9;
+            --secondary: #06b6d4;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --modal-overlay: rgba(0, 0, 0, 0.7);
+
+            /* Animations Options */
+            --anim-speed: 1;
+            --anim-enter-transform: translateY(20px) scale(0.98);
+            --anim-active-transform: translateY(0) scale(1);
+            --anim-timing-func: cubic-bezier(0.16, 1, 0.3, 1);
+
+            /* Spacing */
+            --br-card: 24px;
+            --br-btn: 16px;
+        }
+
+        [data-theme="light"] {
+            /* Theme: Light */
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --primary: #8b5cf6;
+            --primary-hover: #7c3aed;
+            --secondary: #0891b2;
+            --success: #059669;
+            --warning: #d97706;
+            --danger: #dc2626;
+            --border-color: rgba(0, 0, 0, 0.1);
+            --modal-overlay: rgba(0, 0, 0, 0.3);
+        }
+
+        /* Animation Presets */
+        body[data-anim="slide"] {
+            --anim-enter-transform: translateY(30px);
+            --anim-active-transform: translateY(0);
+            --anim-timing-func: cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        body[data-anim="fade"] {
+            --anim-enter-transform: scale(1);
+            --anim-active-transform: scale(1);
+            --anim-timing-func: ease-in-out;
+        }
+        body[data-anim="zoom"] {
+            --anim-enter-transform: scale(0.90);
+            --anim-active-transform: scale(1);
+            --anim-timing-func: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        body[data-anim="bounce"] {
+            --anim-enter-transform: scale(0.85) translateY(20px);
+            --anim-active-transform: scale(1) translateY(0);
+            --anim-timing-func: cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        body[data-anim="flip"] {
+            --anim-enter-transform: perspective(800px) rotateX(15deg) translateY(10px);
+            --anim-active-transform: perspective(800px) rotateX(0deg) translateY(0);
+            --anim-timing-func: cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        /* Theme: BG Effects */
+        #bg-effects {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -10;
+            pointer-events: none;
+            overflow: hidden;
+            transition: opacity 1s;
+        }
+
+        /* BG: Aurora */
+        body[data-bg="aurora"] #bg-effects {
+            background: radial-gradient(circle at top right, var(--primary), transparent 40%),
+                        radial-gradient(circle at bottom left, var(--secondary), transparent 40%);
+            opacity: 0.15;
+            animation: pulseBg 8s infinite alternate;
+            filter: blur(80px);
+        }
+        @keyframes pulseBg {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.3); }
+        }
+
+        /* BG: Grid Cyberspace */
+        body[data-bg="grid"] #bg-effects {
+            background-image: 
+                linear-gradient(var(--border-color) 1px, transparent 1px),
+                linear-gradient(90deg, var(--border-color) 1px, transparent 1px);
+            background-size: 50px 50px;
+            opacity: 0.1;
+            animation: gridMove 20s linear infinite;
+            transform-origin: top;
+            transform: perspective(600px) rotateX(40deg) scale(2);
+        }
+        @keyframes gridMove {
+            0% { background-position: 0 0; }
+            100% { background-position: 0 50px; }
+        }
+
+        /* Theme: UI Style */
+        body[data-ui="glass"] .card-container, 
+        body[data-ui="glass"] .modal-content, 
+        body[data-ui="glass"] .dialog-box {
+            background: rgba(30, 30, 50, 0.4);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+        body[data-theme="light"][data-ui="glass"] .card-container, 
+        body[data-theme="light"][data-ui="glass"] .modal-content, 
+        body[data-theme="light"][data-ui="glass"] .dialog-box {
+            background: rgba(255, 255, 255, 0.4);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        body[data-ui="neon"] .card-container, 
+        body[data-ui="neon"] .modal-content, 
+        body[data-ui="neon"] .dialog-box {
+            border: 1px solid var(--primary);
+            box-shadow: 0 0 20px rgba(124, 58, 237, 0.2), inset 0 0 10px rgba(124, 58, 237, 0.1);
+        }
+        body[data-ui="neon"] h1, 
+        body[data-ui="neon"] h2, 
+        body[data-ui="neon"] .text-gradient {
+            text-shadow: 0 0 10px var(--primary);
+        }
+
+        /* Staggered Card Elements */
+        #capture-card {
+            opacity: 0;
+            transform: translateY(50px) scale(0.9);
+        }
+
+        #capture-card.revealed {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .result-section, .hero-section, .spectrum-container, .badge-rarity {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        #capture-card.revealed .result-section,
+        #capture-card.revealed .hero-section,
+        #capture-card.revealed .spectrum-container,
+        #capture-card.revealed .badge-rarity {
+            opacity: 1;
+            transform: translateY(0);
+            transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* Set Delays */
+        #capture-card.revealed .badge-rarity { transition-delay: 0.1s; }
+        #capture-card.revealed .hero-section { transition-delay: 0.2s; }
+        #capture-card.revealed .spectrum-container { transition-delay: 0.3s; }
+        #capture-card.revealed .result-section:nth-child(5) { transition-delay: 0.4s; }
+        #capture-card.revealed .result-section:nth-child(6) { transition-delay: 0.5s; }
+        #capture-card.revealed .result-section:nth-child(7) { transition-delay: 0.6s; }
+        #capture-card.revealed .result-section:nth-child(8) { transition-delay: 0.7s; }
+
+        /* Story Reveal System */
+        .story-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #000;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            transition: opacity 0.5s;
+        }
+
+        .story-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .story-bg {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            opacity: 0;
+            transition: opacity 3s ease-in;
+            z-index: 1;
+        }
+
+        /* Thematic Backgrounds */
+        .story-bg.bg-extreme {
+            background: radial-gradient(circle at center, #1b2735 0%, #090a0f 100%);
+        }
+        .story-bg.bg-extreme::before {
+            content: ''; position: absolute; width: 200%; height: 200%; top: -50%; left: -50%;
+            background-image: 
+                radial-gradient(1px 1px at 20px 30px, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(1px 1px at 40px 70px, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(1.5px 1.5px at 90px 40px, #ffffff, rgba(0,0,0,0));
+            background-repeat: repeat; background-size: 100px 100px;
+            animation: starsZoom 2s linear infinite; opacity: 0.8;
+        }
+        @keyframes starsZoom { 0% { transform: scale(1); } 100% { transform: scale(1.5); opacity: 0; } }
+
+        .story-bg.bg-growth {
+            background: linear-gradient(to bottom, #87CEEB, #E0F6FF);
+        }
+        .story-bg.bg-growth::before {
+            content: ''; position: absolute; width: 100%; height: 100%;
+            background: radial-gradient(circle at 80% 20%, rgba(255,255,255,0.8) 0%, transparent 50%);
+            animation: sunPulse 4s alternate infinite;
+        }
+        @keyframes sunPulse { 0% { opacity: 0.5; } 100% { opacity: 1; transform: scale(1.1); } }
+
+        .story-bg.bg-fixed {
+            background: #0f172a;
+            background-image: 
+                linear-gradient(rgba(0, 255, 0, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 0, 0.1) 1px, transparent 1px);
+            background-size: 30px 30px;
+            animation: gridMove 5s linear infinite;
+        }
+        @keyframes gridMove { 100% { background-position: 30px 30px; } }
+
+        .story-bg.bg-mixed {
+            background: linear-gradient(45deg, #1e1b4b, #312e81, #701a75);
+            background-size: 200% 200%;
+            animation: gradientShift 4s ease infinite;
+        }
+        @keyframes gradientShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+
+        #story-text-container {
+            z-index: 2;
+            width: 80%;
+            text-align: center;
+        }
+
+        .story-text {
+            color: #fff;
+            font-size: 1.5rem;
+            line-height: 2;
+            text-shadow: 0 0 10px rgba(0,0,0,0.8);
+            opacity: 0;
+            transform: translateY(20px);
+            margin-bottom: 20px;
+            transition: all 1s ease;
+        }
+        .story-text.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        #story-flash {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: white;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 3;
+            transition: opacity 0.5s;
+        }
+        #story-flash.flash {
+            opacity: 1;
+        }
+
+        /* Basic Resets */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', 'Noto Sans Thai', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            /* Hide scroll on body, handle inside screens */
+            transition: background-color calc(0.3s * var(--anim-speed)), color calc(0.3s * var(--anim-speed));
+            background-image: radial-gradient(circle at top right, rgba(124, 58, 237, 0.1), transparent 50%),
+                radial-gradient(circle at bottom left, rgba(6, 182, 212, 0.1), transparent 50%);
+        }
+
+        /* Navigation Hamburger */
+        .nav-trigger {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: transform calc(0.2s * var(--anim-speed));
+            will-change: transform;
+        }
+
+        .nav-trigger:hover {
+            transform: scale(1.05);
+        }
+
+        .hamburger-icon,
+        .hamburger-icon::before,
+        .hamburger-icon::after {
+            width: 24px;
+            height: 2px;
+            background-color: var(--text-main);
+            position: relative;
+            transition: all calc(0.3s * var(--anim-speed));
+            border-radius: 2px;
+        }
+
+        .hamburger-icon::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: 0;
+        }
+
+        .hamburger-icon::after {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: 0;
+        }
+
+        .nav-trigger.open .hamburger-icon {
+            background-color: transparent;
+        }
+
+        .nav-trigger.open .hamburger-icon::before {
+            top: 0;
+            transform: rotate(45deg);
+        }
+
+        .nav-trigger.open .hamburger-icon::after {
+            top: 0;
+            transform: rotate(-45deg);
+        }
+
+        /* Sidebar Container */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -300px;
+            height: 100vh;
+            width: 280px;
+            background-color: var(--card-bg);
+            z-index: 900;
+            padding: 80px 20px 20px;
+            box-shadow: 2px 0 20px rgba(0, 0, 0, 0.2);
+            transition: transform calc(0.4s * var(--anim-speed)) cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: transform;
+            border-right: 1px solid var(--border-color);
+        }
+
+        .sidebar.open {
+            transform: translateX(300px);
+        }
+
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: var(--modal-overlay);
+            z-index: 899;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity calc(0.3s * var(--anim-speed));
+            backdrop-filter: blur(4px);
+        }
+
+        .sidebar-overlay.active {
+            opacity: 1;
+            visibility: visible;
+            cursor: pointer;
+        }
+
+        .menu-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .menu-item {
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: background calc(0.2s * var(--anim-speed)), transform calc(0.2s * var(--anim-speed));
+            will-change: transform;
+            color: var(--text-main);
+        }
+
+        .menu-item:hover {
+            background: rgba(124, 58, 237, 0.1);
+            color: var(--primary);
+            transform: translateX(4px);
+        }
+
+        /* Main Container */
+        #app {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+        }
+
+        .screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            padding: 0 20px;
+            display: block;
+            /* Removed flex to fix scroll cutoff */
+            opacity: 0;
+            visibility: hidden;
+            transform: var(--anim-enter-transform);
+            transition: opacity calc(0.4s * var(--anim-speed)), transform calc(0.4s * var(--anim-speed)) var(--anim-timing-func), visibility calc(0.4s * var(--anim-speed));
+            will-change: opacity, transform;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .screen.active {
+            opacity: 1;
+            visibility: visible;
+            transform: var(--anim-active-transform);
+            z-index: 10;
+        }
+
+        .card-container {
+            width: 100%;
+            max-width: 600px;
+            background: var(--card-bg);
+            border-radius: var(--br-card);
+            padding: 40px 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            margin: 40px auto;
+            /* Centers horizontally and leaves scroll space vertically */
+            position: relative;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Typography */
+        h1,
+        h2,
+        h3 {
+            line-height: 1.3;
+            color: var(--text-main);
+        }
+
+        p {
+            line-height: 1.7;
+            color: var(--text-muted);
+        }
+
+        .text-gradient {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+        }
+
+        .text-gradient-alt {
+            background: linear-gradient(135deg, #10b981, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+        }
+
+        /* Buttons Component */
+        .btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: transform calc(0.2s * var(--anim-speed)), box-shadow calc(0.2s * var(--anim-speed));
+            will-change: transform;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(124, 58, 237, 0.3);
+        }
+
+        .btn:active {
+            transform: scale(0.96);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: rgba(124, 58, 237, 0.1);
+            box-shadow: none;
+        }
+
+        /* --- SCREEN 1: START --- */
+        #screen-start .card-container {
+            text-align: center;
+            padding: 60px 30px;
+            margin-top: 15vh;
+        }
+
+        .typewriter h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            margin-bottom: 40px;
+        }
+
+        .badge-estimate {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 30px;
+            border: 1px solid var(--border-color);
+        }
+
+        /* --- SCREEN 2: QUIZ --- */
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .btn-back {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 18px;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background calc(0.2s * var(--anim-speed)), color calc(0.2s * var(--anim-speed));
+        }
+
+        .btn-back:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-main);
+        }
+
+        .progress-container {
+            width: 100%;
+            height: 6px;
+            background: var(--border-color);
+            border-radius: 10px;
+            margin-bottom: 15px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            width: 0%;
+            border-radius: 10px;
+            transition: width calc(0.4s * var(--anim-speed)) ease-out;
+            will-change: width;
+        }
+
+        .quiz-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+
+        .timer {
+            color: var(--warning);
+            font-family: 'Inter', monospace;
+        }
+
+        .question-text {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 30px;
+            min-height: 80px;
+        }
+
+        .options-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-btn {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            padding: 18px 24px;
+            border-radius: var(--br-btn);
+            color: var(--text-main);
+            font-size: 1rem;
+            text-align: left;
+            cursor: pointer;
+            transition: all calc(0.2s * var(--anim-speed));
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option-label {
+            width: 30px;
+            height: 30px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-weight: 600;
+            flex-shrink: 0;
+            color: var(--primary);
+        }
+
+        /* Ripple effect */
+        .option-btn .ripple {
+            position: absolute;
+            background: rgba(124, 58, 237, 0.4);
+            border-radius: 50%;
+            transform: scale(0);
+            animation: ripple 0.6s linear;
+            pointer-events: none;
+        }
+
+        @keyframes ripple {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+
+        .option-btn:hover {
+            border-color: var(--primary);
+            background: rgba(124, 58, 237, 0.05);
+            transform: translateX(4px);
+        }
+
+        .option-btn.selected {
+            background: rgba(124, 58, 237, 0.15);
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .option-btn.selected .option-label {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* --- SCREEN 3: LOADING --- */
+        #screen-loading .card-container {
+            margin-top: 25vh;
+        }
+
+        .loader-container {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .brain-icon {
+            font-size: 5rem;
+            margin-bottom: 20px;
+            animation: pulse 2s infinite ease-in-out;
+            display: inline-block;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(0.95);
+                opacity: 0.8;
+                filter: drop-shadow(0 0 10px rgba(124, 58, 237, 0.5));
+            }
+
+            50% {
+                transform: scale(1.05);
+                opacity: 1;
+                filter: drop-shadow(0 0 25px rgba(6, 182, 212, 0.8));
+            }
+
+            100% {
+                transform: scale(0.95);
+                opacity: 0.8;
+                filter: drop-shadow(0 0 10px rgba(124, 58, 237, 0.5));
+            }
+        }
+
+        .fact-text {
+            min-height: 60px;
+            font-style: italic;
+            color: var(--secondary);
+            margin-top: 20px;
+            transition: opacity 0.5s;
+        }
+
+        /* --- SCREEN 4: RESULT (IG Story Friendly) --- */
+        #screen-result {
+            padding: 0;
+        }
+
+        #screen-result .card-container {
+            max-width: 420px;
+            /* Thinner for IG story ratio */
+            padding: 0;
+            overflow: hidden;
+            /* For save to image capture */
+            border-radius: 24px;
+            margin: 20px auto;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .result-capture-area {
+            background: var(--card-bg);
+            padding: 30px 20px;
+            position: relative;
+            background-image: linear-gradient(180deg, var(--card-bg) 0%, rgba(15, 15, 26, 0.95) 100%);
+        }
+
+        .result-capture-area::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(circle at top, rgba(124, 58, 237, 0.15), transparent 60%);
+            z-index: 0;
+        }
+
+        .result-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-section {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .badge-rarity {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: linear-gradient(135deg, #f59e0b, #ef4444);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 10px rgba(245, 158, 11, 0.3);
+        }
+
+        .mindset-emoji {
+            font-size: 4rem;
+            margin-bottom: 5px;
+            filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.2));
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        .result-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 5px;
+            line-height: 1.1;
+        }
+
+        /* Dual Progress / Spectrum */
+        .spectrum-container {
+            margin-bottom: 25px;
+        }
+
+        .spectrum-bar {
+            width: 100%;
+            height: 24px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            display: flex;
+            overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
+            position: relative;
+        }
+
+        .bar-growth {
+            height: 100%;
+            background: linear-gradient(90deg, #3b82f6, #10b981);
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+            color: white;
+            font-weight: bold;
+            font-size: 0.8rem;
+            transition: width 1.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+            justify-content: flex-start;
+        }
+
+        .bar-fixed {
+            height: 100%;
+            background: linear-gradient(90deg, #f59e0b, #ef4444);
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+            color: white;
+            font-weight: bold;
+            font-size: 0.8rem;
+            transition: width 1.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+            justify-content: flex-end;
+        }
+
+        .spectrum-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 5px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .color-g {
+            color: #10b981;
+        }
+
+        .color-f {
+            color: #ef4444;
+        }
+
+        /* Generic Section Card */
+        .result-section {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 12px;
+        }
+
+        .sec-title {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .sec-title.t-green {
+            color: var(--success);
+        }
+
+        .sec-title.t-red {
+            color: var(--danger);
+        }
+
+        .sec-title.t-blue {
+            color: var(--secondary);
+        }
+
+        ul.advice-list {
+            list-style: none;
+            padding-left: 0;
+            margin-top: 8px;
+        }
+
+        ul.advice-list li {
+            position: relative;
+            padding-left: 15px;
+            margin-bottom: 6px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        ul.advice-list li::before {
+            content: "•";
+            position: absolute;
+            left: 5px;
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        /* Careers Grid */
+        .careers-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .career-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .career-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .career-icon {
+            font-size: 2rem;
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .career-info {
+            flex-grow: 1;
+        }
+
+        .career-name {
+            font-weight: 700;
+            font-size: 1rem;
+            margin-bottom: 2px;
+        }
+
+        .career-reason {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 5px;
+        }
+
+        .career-match-bar {
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .career-match-fill {
+            height: 100%;
+            background: var(--primary);
+            border-radius: 2px;
+            width: 0;
+            /* Set via JS */
+        }
+
+        /* Actions Bottom */
+        .actions-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            padding: 20px;
+            background: var(--card-bg);
+            border-top: 1px solid var(--border-color);
+        }
+
+        .btn-restart {
+            grid-column: span 2;
+        }
+
+        .branding {
+            text-align: center;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            opacity: 0.5;
+            margin-top: 10px;
+        }
+
+        /* --- MODALS --- */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--modal-overlay);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all calc(0.3s * var(--anim-speed));
+            backdrop-filter: blur(5px);
+        }
+
+        .modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--br-card);
+            width: 100%;
+            max-width: 500px;
+            padding: 30px;
+            position: relative;
+            transform: var(--anim-enter-transform);
+            transition: transform calc(0.3s * var(--anim-speed)) var(--anim-timing-func);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal.active .modal-content {
+            transform: var(--anim-active-transform);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Settings Elements */
+        .setting-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .setting-row:last-child {
+            border-bottom: none;
+        }
+
+        /* Toggle Switch */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 28px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.2);
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked+.slider {
+            background-color: var(--primary);
+        }
+
+        input:focus+.slider {
+            box-shadow: 0 0 1px var(--primary);
+        }
+
+        input:checked+.slider:before {
+            transform: translateX(22px);
+        }
+
+        /* Range Slider */
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 120px;
+            background: transparent;
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+            margin-top: -6px;
+        }
+
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+        }
+
+        /* Tabs Info Modal */
+        .tabs-nav {
+            display: flex;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 20px;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            padding: 10px 15px;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-weight: 600;
+            flex-grow: 1;
+            border-bottom: 2px solid transparent;
+        }
+
+        .tab-btn.active {
+            color: var(--primary);
+            border-bottom: 2px solid var(--primary);
+        }
+
+        .tab-pane {
+            display: none;
+            animation: fadeIn 0.4s;
+        }
+
+        .tab-pane.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Responsive / Mobile focus */
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .screen {
+                padding: 10px;
+            }
+
+            .card-container {
+                padding: 30px 20px;
+                border-radius: 20px;
+            }
+
+            .question-text {
+                font-size: 1.2rem;
+                min-height: 50px;
+            }
+
+            .option-btn {
+                padding: 14px 16px;
+                font-size: 0.95rem;
+            }
+
+            .result-title {
+                font-size: 1.8rem;
+            }
+        }
+
+        /* Alert Dialog (Custom Confirm) */
+        .dialog {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--modal-overlay);
+            z-index: 3000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity calc(0.2s * var(--anim-speed));
+        }
+
+        .dialog.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .dialog-box {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            text-align: center;
+            max-width: 320px;
+            transform: var(--anim-enter-transform);
+            transition: transform calc(0.2s * var(--anim-speed)) var(--anim-timing-func);
+        }
+
+        .dialog.active .dialog-box {
+            transform: var(--anim-active-transform);
+        }
+
+        .dialog-btns {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        /* PC Full-Screen Result UI */
+        @media (min-width: 768px) {
+            #screen-result .card-container {
+                max-width: 900px;
+            }
+
+            .result-capture-area {
+                padding: 40px;
+                border-radius: 16px;
+            }
+
+            .result-content {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 20px;
+                align-items: stretch;
+            }
+
+            .res-full-width {
+                grid-column: 1 / -1;
+            }
+
+            .result-section {
+                height: 100%;
+                margin-bottom: 0px;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .actions-group {
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                gap: 20px;
+                margin-top: 30px;
+            }
+
+            .actions-group .btn {
+                width: auto;
+                min-width: 200px;
+                margin-bottom: 0;
+            }
+        }
+        .form-select {
+            width: 100%;
+            padding: 8px 12px;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 0.95rem;
+            outline: none;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+        .form-select:hover {
+            border-color: var(--primary);
+        }
+        .form-select option {
+            background: var(--card-bg);
+            color: var(--text-main);
+        }
+    </style>
+</head>
+
+<body data-theme="dark">
+    <!-- Background Effects Layer -->
+    <div id="bg-effects"></div>
+
+    <!-- Hamburger Navigation -->
+    <div class="nav-trigger" onclick="toggleMenu()" id="navTrigger">
+        <div class="hamburger-icon"></div>
+    </div>
+
+    <!-- Sidebar Menu -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleMenu()"></div>
+    <div class="sidebar" id="sidebar">
+        <ul class="menu-list">
+            <li class="menu-item" onclick="navigateHome()"><span style="font-size: 1.3rem;">🏠</span>หน้าหลัก</li>
+            <li class="menu-item" onclick="openModal('modal-howto')"><span style="font-size: 1.3rem;">📖</span>วิธีเล่น
+            </li>
+            <li class="menu-item" onclick="openModal('modal-info')"><span style="font-size: 1.3rem;">ℹ️</span>เกี่ยวกับ
+                Mindset</li>
+            <li class="menu-item" onclick="openModal('modal-settings')"><span
+                    style="font-size: 1.3rem;">⚙️</span>ตั้งค่า</li>
+            <li class="menu-item" onclick="confirmRestart()"><span style="font-size: 1.3rem;">🔄</span>รีสตาร์ท</li>
+        </ul>
+    </div>
+
+    <!-- Main App Content -->
+    <main id="app">
+        <!-- 1. Start Screen -->
+        <section id="screen-start" class="screen active">
+            <div class="card-container">
+                <div class="typewriter">
+                    <h1>คุณมี <span class="text-gradient">Mindset</span><br>แบบไหน?</h1>
+                </div>
+                <p class="subtitle">ทดสอบมุมมองที่คุณมีต่อความท้าทาย ความล้มเหลว และการพัฒนาตัวเองจากคำถามจิตวิทยา 20
+                    ข้อ</p>
+                <div class="badge-estimate">⏱️ ใช้เวลาประมาณ 3-5 นาที</div>
+                <button class="btn" onclick="startQuiz()">
+                    เริ่มวิเคราะห์ตัวเอง 🚀
+                </button>
+                <button class="btn btn-outline" style="margin-top: 15px;" onclick="openModal('modal-howto')">
+                    วิธีเล่น 📖
+                </button>
+            </div>
+        </section>
+
+        <!-- 2. Quiz Screen -->
+        <section id="screen-quiz" class="screen">
+            <div class="card-container">
+                <div class="quiz-header">
+                    <button class="btn-back" onclick="goBack()" title="ย้อนกลับ">←</button>
+                    <div class="quiz-info">
+                        <span id="quiz-progress-text">ข้อ 1 / 20</span>
+                        <span class="timer" id="quiz-timer" style="display: none;">00:30</span>
+                    </div>
+                </div>
+
+                <div class="progress-container">
+                    <div class="progress-bar" id="quiz-progress-bar"></div>
+                </div>
+
+                <h2 class="question-text" id="question-text">Loading question...</h2>
+
+                <div class="options-grid" id="options-container">
+                    <!-- Options injected here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. Loading Screen -->
+        <section id="screen-loading" class="screen">
+            <div class="card-container" style="background: transparent; border: none; box-shadow: none;">
+                <div class="loader-container">
+                    <div class="brain-icon">🧠</div>
+                    <h2 class="text-gradient">กำลังวิเคราะห์ Mindset ของคุณ...</h2>
+                    <div class="progress-container" style="margin-top: 30px;">
+                        <div class="progress-bar" id="loading-bar" style="width: 0%"></div>
+                    </div>
+                    <p class="fact-text" id="loading-fact">รู้หรือไม่?
+                        สมองมนุษย์สามารถสร้างเส้นทางประสาทใหม่ได้ตลอดชีวิต เรียกว่า Neuroplasticity</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. Result Screen -->
+        <section id="screen-result" class="screen">
+            <!-- Story Reveal Overlay -->
+            <div id="story-overlay" class="story-overlay hidden">
+                <div id="story-bg" class="story-bg"></div>
+                <div id="story-text-container">
+                    <p id="story-text-1" class="story-text"></p>
+                    <p id="story-text-2" class="story-text"></p>
+                </div>
+                <div id="story-flash"></div>
+            </div>
+
+            <div class="card-container" id="capture-card">
+                <div class="result-capture-area">
+                    <div class="result-content">
+                        <!-- F. Rarity Top -->
+                        <div style="text-align: center;" class="res-full-width">
+                            <div class="badge-rarity" id="res-rarity">🏆 Top 30% Growth Mindset</div>
+                        </div>
+
+                        <!-- Hero -->
+                        <div class="hero-section res-full-width">
+                            <div class="mindset-emoji" id="res-emoji">🌱</div>
+                            <div class="result-title text-gradient" id="res-title">Growth Mindset</div>
+                            <p id="res-subtitle">คุณเชื่อว่าศักยภาพพัฒนาได้เสมอ</p>
+                        </div>
+
+                        <!-- A. Identity summary -->
+                        <div style="text-align: center; margin-bottom: 20px; font-size: 1.1rem; font-weight: 700;" class="text-gradient res-full-width">
+                            มี Fixed <span id="res-txt-f">0</span>% และ Growth <span id="res-txt-g">0</span>%
+                        </div>
+
+                        <!-- E. Mindset Compatibility (Dual Bar) -->
+                        <div class="spectrum-container res-full-width">
+                            <div class="spectrum-labels" style="margin-bottom: 5px;">
+                                <span class="color-g">Growth <span id="lbl-growth-num">0</span>%</span>
+                                <span class="color-f"><span id="lbl-fixed-num">0</span>% Fixed</span>
+                            </div>
+                            <div class="spectrum-bar">
+                                <div class="bar-growth" id="bar-growth" style="width: 50%;"></div>
+                                <div class="bar-fixed" id="bar-fixed" style="width: 50%;"></div>
+                            </div>
+                        </div>
+
+                        <div class="result-section">
+                            <div class="sec-title">👤 นิสัยของคุณ</div>
+                            <p id="res-desc" style="font-size: 0.85rem; line-height: 1.5; color: var(--text-muted);">
+                            </p>
+                        </div>
+
+                        <!-- C. Strengths -->
+                        <div class="result-section">
+                            <div class="sec-title t-green">✨ จุดเด่นของคุณ</div>
+                            <ul class="advice-list" id="res-strengths"></ul>
+                        </div>
+
+                        <!-- B. Weaknesses & Advice -->
+                        <div class="result-section">
+                            <div class="sec-title t-red">⚠️ ข้อควรระวัง</div>
+                            <ul class="advice-list" id="res-weakness" style="color: var(--text-muted)"></ul>
+                            <div class="sec-title t-blue" style="font-size: 0.95rem; margin-top: 15px;">💡 วิธีพัฒนา:
+                            </div>
+                            <ul class="advice-list" id="res-advice"></ul>
+                        </div>
+
+                        <!-- D. Top Careers -->
+                        <div class="result-section">
+                            <div class="sec-title">💼 3 สายงานที่เหมาะสุด (Top 3)</div>
+                            <div class="careers-grid" id="res-careers">
+                                <!-- Cards injected here -->
+                            </div>
+                        </div>
+
+                        <div class="branding res-full-width">สร้างโดย nolmal_nus • Growth vs Fixed Quiz</div>
+                    </div>
+                </div>
+
+                <div class="actions-group">
+                    <button class="btn btn-outline" onclick="playStoryAnimation()"><span style="font-size:1.2rem;">🎬</span>
+                        เล่นสตอรี่อีกครั้ง</button>
+                    <button class="btn btn-outline" onclick="exportResult()"><span style="font-size:1.2rem;">📸</span>
+                        บันทึกรูป</button>
+                    <button class="btn btn-outline" onclick="copyResultLink()"><span style="font-size:1.2rem;">🔗</span>
+                        คัดลอกผล</button>
+                    <button class="btn btn-restart" onclick="confirmRestart()">เล่นอีกครั้ง 🔄</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modals -->
+    <!-- 1. Settings -->
+    <div class="modal" id="modal-settings">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('modal-settings')">✕</button>
+            <h2>⚙️ ตั้งค่า</h2>
+            <div class="setting-row">
+                <span>โหมดกลางคืน (Dark Mode)</span>
+                <label class="switch">
+                    <input type="checkbox" id="set-theme" checked onchange="toggleTheme(this.checked)">
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <div class="setting-row">
+                <span>จับเวลาตอบคำถาม (ข้อละ 30วิ)</span>
+                <label class="switch">
+                    <input type="checkbox" id="set-timer" onchange="toggleTimerSetting(this.checked)">
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <div class="setting-row">
+                <span>เสียงเอฟเฟกต์ (Sound)</span>
+                <label class="switch">
+                    <input type="checkbox" id="set-sound" checked onchange="toggleSound(this.checked)">
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <div class="setting-row" style="flex-direction: column; align-items: flex-start; gap: 8px;">
+                <span>สไตล์ลูกเล่น (Animation Style)</span>
+                <div style="width: 100%;">
+                    <select id="set-anim-style" onchange="changeAnimStyle(this.value)" class="form-select">
+                        <option value="slide">Smooth Slide (สไลด์ลื่นไหล)</option>
+                        <option value="fade">Cinematic Fade (นุ่มนวล เรียบหรู)</option>
+                        <option value="zoom">Soft Zoom (ขยายเข้า เบาสบาย)</option>
+                        <option value="bounce">Dynamic Pop (เด้งเด้ง มีชีวิตชีวา)</option>
+                        <option value="flip">3D Flip (หมุน 3 มิติ ล้ำลึก)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="setting-row" style="flex-direction: column; align-items: flex-start; gap: 8px;">
+                <span>เอฟเฟกต์พื้นหลัง (BG Effect)</span>
+                <div style="width: 100%;">
+                    <select id="set-bg-style" onchange="changeBgStyle(this.value)" class="form-select">
+                        <option value="none">Minimal (เรียบง่าย ปิดเอฟเฟกต์)</option>
+                        <option value="aurora">Neon Aurora (แสงออโรร่าเรืองแสง)</option>
+                        <option value="grid">Cyberspace Grid (ตารางมิติไซเบอร์)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="setting-row" style="flex-direction: column; align-items: flex-start; gap: 8px;">
+                <span>สไตล์การตกแต่ง (UI Style)</span>
+                <div style="width: 100%;">
+                    <select id="set-ui-style" onchange="changeUiStyle(this.value)" class="form-select">
+                        <option value="flat">Modern Flat (เรียบแบนทันสมัย)</option>
+                        <option value="glass">Glassmorphism (กระจกใสเบลอ)</option>
+                        <option value="neon">Neon Cyberpunk (ขอบเรืองแสงไฟสว่าง)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="setting-row">
+                <span>ความเร็ว Animation</span>
+                <input type="range" id="set-speed" min="0" max="2" step="1" value="1"
+                    onchange="changeSpeed(this.value)">
+            </div>
+            <button class="btn btn-outline"
+                style="margin-top: 20px; width: 100%; border-color: var(--danger); color: var(--danger)"
+                onclick="resetSettings()">รีเซ็ตการตั้งค่า</button>
+        </div>
+    </div>
+
+    <!-- 2. Info Definition -->
+    <div class="modal" id="modal-info">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('modal-info')">✕</button>
+            <h2>🧠 เกี่ยวกับ Mindset</h2>
+            <div class="tabs-nav">
+                <button class="tab-btn active" onclick="switchTab('tab-g', this)">Growth</button>
+                <button class="tab-btn" onclick="switchTab('tab-f', this)">Fixed</button>
+                <button class="tab-btn" onclick="switchTab('tab-c', this)">เปรียบเทียบ</button>
+            </div>
+            <div class="tab-pane active" id="tab-g">
+                <h3 class="t-green">Growth Mindset (กรอบความคิดแบบเติบโต)</h3>
+                <p>ความเชื่อที่ว่า ความสามารถ สติปัญญา และทักษะต่างๆ สามารถพัฒนาได้ผ่านความพยายาม การเรียนรู้
+                    และการฝึกฝน</p>
+                <ul class="advice-list">
+                    <li>มองปัญหาคือความท้าทายที่ทำให้เก่งขึ้น</li>
+                    <li>ไม่กลัวความล้มเหลว แต่มองว่าเป็นบทเรียน</li>
+                    <li>ยินดีรับฟังคำวิจารณ์เพื่อนำมาปรับปรุง</li>
+                </ul>
+            </div>
+            <div class="tab-pane" id="tab-f">
+                <h3 class="t-red">Fixed Mindset (กรอบความคิดแบบยึดติด)</h3>
+                <p>ความเชื่อที่ว่า ความสามารถและสติปัญญาเป็นสิ่งที่มีมาตั้งแต่เกิด ถูกกำหนดไว้แล้ว
+                    ไม่สามารถเปลี่ยนแปลงหรือพัฒนาได้มากนัก</p>
+                <ul class="advice-list">
+                    <li>หลีกเลี่ยงความท้าทายเพราะกลัวดูไม่เก่ง</li>
+                    <li>ยอมแพ้ง่ายเมื่อเจออุปสรรค</li>
+                    <li>มองความสำเร็จของคนอื่นเป็นภัยคุกคาม</li>
+                </ul>
+            </div>
+            <div class="tab-pane" id="tab-c">
+                <h3>ตารางเปรียบเทียบ</h3>
+                <table
+                    style="width:100%; text-align:left; border-collapse: collapse; margin-top: 10px; font-size: 0.9rem;">
+                    <tr style="border-bottom: 1px solid var(--border-color);">
+                        <th style="padding:8px 0; color:var(--success)">Growth</th>
+                        <th style="padding:8px 0; color:var(--danger)">Fixed</th>
+                    </tr>
+                    <tr style="border-bottom: 1px solid var(--border-color);">
+                        <td style="padding:8px 0;">ล้มเหลว = เรียนรู้</td>
+                        <td style="padding:8px 0;">ล้มเหลว = ไร้ความสามารถ</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid var(--border-color);">
+                        <td style="padding:8px 0;">พยายาม = ทางสู่ความสำเร็จ</td>
+                        <td style="padding:8px 0;">พยายาม = ถ้าเก่งจริงไม่ต้องพยายาม</td>
+                    </tr>
+                    <tr>
+                        <td style="padding:8px 0;">คำวิจารณ์ = ข้อมูลพัฒนาตนเอง</td>
+                        <td style="padding:8px 0;">คำวิจารณ์ = การโจมตีส่วนตัว</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. How to play -->
+    <div class="modal" id="modal-howto">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('modal-howto')">✕</button>
+            <h2>📖 วิธีเล่น</h2>
+            <ul class="advice-list">
+                <li>ระบบจะสุ่มคำถาม 20 ข้อจากคลังที่มี</li>
+                <li>อ่านสถานการณ์และเลือกข้อที่ "ตรงกับใจคุณที่สุด" ไม่ใช่ข้อที่คิดว่าถูกที่สุด</li>
+                <li>คะแนนจะถูกคำนวณเบื้องหลังระหว่างความเป็น Growth และ Fixed</li>
+                <li>หากเผลอกดผิด สามารถกดปุ่ม ← ด้านซ้ายบนของหน้าจอเพื่อย้อนกลับได้</li>
+                <li>เมื่อทำครบ ระบบจะวิเคราะห์ตัวตนและแนะนำแนวทางให้คุณ!</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Dialog -->
+    <div class="dialog" id="custom-dialog">
+        <div class="dialog-box">
+            <h3 id="dialog-title">ยืนยัน</h3>
+            <p id="dialog-desc" style="margin-top: 10px;">แน่ใจหรือไม่?</p>
+            <div class="dialog-btns">
+                <button class="btn btn-outline" style="padding: 10px;" onclick="closeDialog()">ยกเลิก</button>
+                <button class="btn" style="padding: 10px;" id="dialog-confirm">ตกลง</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* =======================================
+           1. QUESTION BANK (30 Questions)
+           ======================================= */
+        const QUESTION_BANK = [
+            {
+                q: "เมื่อคุณได้รับโปรเจกต์งานที่ไม่เคยทำมาก่อนและดูยากมาก คุณจะรู้สึกอย่างไร?",
+                o: [
+                    { t: "กังวลว่าจะทำพังและทำให้ตัวเองดูไม่เก่ง เลี่ยงได้ก็อยากเลี่ยง", w: { f: 5, g: 0 } },
+                    { t: "รู้สึกเครียด แต่ก็จำใจรับมาทำเพราะขัดไม่ได้", w: { f: 4, g: 1 } },
+                    { t: "กังวลเล็กน้อย แต่คิดว่าน่าจะมีคนช่วยสอนได้", w: { f: 2, g: 3 } },
+                    { t: "ตื่นเต้นที่จะได้ลองทำอะไรใหม่ๆ แม้จะรู้ว่าต้องเจอปัญหาแน่", w: { f: 0, g: 5 } },
+                    { t: "มองว่าเป็นโอกาสในการพิสูจน์ตัวเองและเรียนรู้ทักษะใหม่", w: { f: 1, g: 4 } }
+                ]
+            },
+            {
+                q: "หลังจากที่คุณเรียนภาษาใหม่มา 2 เดือน แต่ยังสื่อสารแทบไม่ได้เลย คุณจะ...",
+                o: [
+                    { t: "เลิกเรียน เพราะคิดว่าตัวเองไม่มีหัวด้านภาษา", w: { f: 5, g: 0 } },
+                    { t: "บ่นว่าภาษานี้ยากเกินไป และหาข้ออ้างในการเรียนน้อยลง", w: { f: 4, g: 1 } },
+                    { t: "รู้สึกท้อ แต่ก็ฝืนเรียนต่อไปตามตาราง", w: { f: 3, g: 2 } },
+                    { t: "ลองเปลี่ยนวิธีการเรียน หรือหาสื่ออื่นมาช่วยเสริม", w: { f: 1, g: 4 } },
+                    { t: "คิดว่าเป็นเรื่องปกติของช่วงเริ่มต้น และทบทวนพื้นฐานให้แน่นขึ้น", w: { f: 0, g: 5 } }
+                ]
+            },
+            {
+                q: "เมื่อเพื่อนร่วมงานรุ่นเดียวกันได้รับการเลื่อนตำแหน่งตัดหน้าคุณ คุณรู้สึก...",
+                o: [
+                    { t: "อิจฉาและคิดว่าหัวหน้าลำเอียง", w: { f: 5, g: 0 } },
+                    { t: "เสียเซลฟ์ รู้สึกว่าตัวเองคงพัฒนาไปกว่านี้ไม่ได้แล้ว", w: { f: 4, g: 1 } },
+                    { t: "ยินดีด้วยตามมารยาท แต่ลึกๆ ก็แอบน้อยใจตนเอง", w: { f: 2, g: 3 } },
+                    { t: "ยินดีด้วยใจจริง และสังเกตว่าเขามีจุดเด่นอะไรที่ทำให้ได้เลื่อนขั้น", w: { f: 0, g: 5 } },
+                    { t: "เข้าไปถามขอคำแนะนำจากเขาเพื่อนำมาพัฒนาผลงานตัวเอง", w: { f: 0, g: 5 } }
+                ]
+            },
+            {
+                q: "คุณถูกวิจารณ์ผลงานอย่างหนักในที่ประชุม คุณจะรับมืออย่างไร?",
+                o: [
+                    { t: "โกรธและหาเหตุผลมาเถียงกลับทันทีเพื่อปกป้องตัวเอง", w: { f: 5, g: 0 } },
+                    { t: "เงียบ รู้สึกอาย และไม่อยากทำงานชิ้นนี้อีก", w: { f: 4, g: 1 } },
+                    { t: "เสียใจ แต่ก็รับฟังไว้เพื่อไม่ให้เกิดเรื่องอีก", w: { f: 2, g: 3 } },
+                    { t: "รับฟังอย่างมีสติ และจดประเด็นต่างๆ ไปปรับแก้ทันที", w: { f: 1, g: 4 } },
+                    { t: "ขอบคุณสำหรับข้อเสนอแนะ และถามเจาะลึกเพื่อความเข้าใจที่ชัดเจน", w: { f: 0, g: 5 } }
+                ]
+            },
+            {
+                q: "เมื่อเห็นคนที่ประสบความสำเร็จตั้งแต่อายุน้อย คุณมีความคิดอย่างไร?",
+                o: [
+                    { t: "เขาแค่โชคดี หรือมีต้นทุนชีวิตที่ดีกว่าเรา", w: { f: 5, g: 0 } },
+                    { t: "เขาเกิดมามีพรสวรรค์ ซึ่งเราไม่มีทางเป็นแบบนั้นได้", w: { f: 4, g: 1 } },
+                    { t: "รู้สึกกดดันตัวเองว่าทำไมเรายังไม่ไปถึงไหน", w: { f: 3, g: 2 } },
+                    { t: "รู้สึกมีแรงบันดาลใจ อยากรู้สตอรี่เบื้องหลังของเขา", w: { f: 1, g: 4 } },
+                    { t: "ศึกษาแนวคิดและวิธีการทำงานของเขา เพื่อนำมาประยุกต์ใช้กับตัวเอง", w: { f: 0, g: 5 } }
+                ]
+            },
+            {
+                q: "คำพูดใดที่คุณมักจะพูดกับตัวเองเวลาเจอโจทย์ยากๆ ท้าทาย?",
+                o: [
+                    { t: "'มันไม่ใช่ทางของฉัน ปล่อยให้คนอื่นทำดีกว่า'", w: { f: 5, g: 0 } },
+                    { t: "'ถ้าทำพลาดขึ้นมา ฉันต้องดูโง่แน่ๆ'", w: { f: 4, g: 1 } },
+                    { t: "'ลองดูซักตั้ง ถ้าไม่ได้ค่อยว่ากัน'", w: { f: 2, g: 3 } },
+                    { t: "'ต้องทำยังไงถึงจะแก้โจทย์นี้ได้นะ?'", w: { f: 0, g: 5 } },
+                    { t: "'ฉันอาจจะยังทำไม่ได้ตอนนี้ แต่ถ้าพยายามต้องทำได้แน่'", w: { f: 0, g: 5 } }
+                ]
+            },
+            {
+                q: "คุณสอบใบประกอบวิชาชีพไม่ผ่านในครั้งแรก...",
+                o: [
+                    { t: "ตัดสินใจล้มเลิก เพราะคิดว่ามันยากเกินความสามารถ", w: { f: 5, g: 0 } },
+                    { t: "โทษข้อสอบที่ออกยากเกินไป ไม่อิงตามที่เรียน", w: { f: 4, g: 1 } },
+                    { t: "เสียใจมาก และใช้เวลาพักใหญ่กว่าจะกล้าสอบใหม่", w: { f: 3, g: 2 } },
+                    { t: "วิเคราะห์คะแนนว่าอ่อนพาร์ทไหน แล้วติวพาร์ทนั้นเพิ่ม", w: { f: 0, g: 5 } },
+                    { t: "ลงสอบรอบถัดไปทันที พร้อมเปลี่ยนวิธีการอ่านหนังสือใหม่", w: { f: 1, g: 4 } }
+                ]
+            },
+            {
+                q: "สมมติว่าคุณต้องเลือกทีมเพื่อเข้าแข่งขันรายการหนึ่ง คุณจะเลือก...",
+                o: [
+                    { t: "ทีมที่มีคนเก่งมากๆ คอยแบก จะได้การันตีชัยชนะ", w: { f: 5, g: 0 } },
+                    { t: "ทีมที่ทุกคนมีระดับพอๆ กับฉัน ฉันจะได้ไม่ดูด้อย", w: { f: 4, g: 1 } },
+                    { t: "ทีมเพื่อนสนิท ที่ทำงานด้วยความคุ้นเคย ไม่ต้องปรับตัวมาก", w: { f: 3, g: 2 } },
+                    { t: "ทีมที่มีทักษะหลากหลาย เพื่อมาเติมเต็มและเรียนรู้กันและกัน", w: { f: 1, g: 4 } },
+                    { t: "ทีมที่มีคนเก่งกว่า เพื่อผลักดันให้ตัวฉันต้องเก่งขึ้นตาม", w: { f: 0, g: 5 } }
+                ]
+            },
+            {
+                q: "คุณตั้งใจลดน้ำหนักมา 1 เดือนแต่น้ำหนักไม่ลดลงเลย คุณจะ...",
+                o: [
+                    { t: "ล้มเลิก คิดว่าระบบเผาผลาญพังไปแล้ว ช่างมันเถอะ", w: { f: 5, g: 0 } },
+                    { t: "บ่นลงโซเชียล แล้วกลับไปกินบุฟเฟ่ต์ปลอบใจตัวเอง", w: { f: 4, g: 1 } },
+                    { t: "ท้อใจ แต่ก็ทนทำตารางเดิมต่อไปแบบเซ็งๆ", w: { f: 3, g: 2 } },
+                    { t: "ลองหาความรู้เพิ่มเรื่องโภชนาการ และปรับรูปแบบการกิน", w: { f: 1, g: 4 } },
+                    { t: "ปรึกษาผู้เชี่ยวชาญ และเริ่มวัดสัดส่วนไขมันแทนการดูแค่น้ำหนัก", w: { f: 0, g: 5 } }
+                ]
+            },
+            {
+                q: "เมื่อคุณต้องพรีเซนต์งาน และมีคนถามคำถามที่คุณตอบไม่ได้...",
+                o: [
+                    { t: "รู้สึกเสียหน้ามาก พยายามหาคำตอบแบบดำน้ำโชว์ความรู้", w: { f: 5, g: 0 } },
+                    { t: "อารมณ์เสียที่โดนฉีกหน้า และโยนคำถามกลับไปให้คนถาม", w: { f: 4, g: 1 } },
+                    { t: "ตอบสั้นๆ ว่าไม่รู้ และรีบข้ามไปหน้าอื่น", w: { f: 3, g: 2 } },
+                    { t: "ยอมรับตรงๆ ว่าไม่ทราบ และจะหาข้อมูลมาตอบให้ภายหลัง", w: { f: 0, g: 5 } },
+                    { t: "ชื่นชมคำถามนั้น และชวนทุกคนในห้องร่วมกันหาคำตอบ", w: { f: 0, g: 5 } }
+                ]
+            },
+            {
+                q: "มีคนบอกว่าคุณ 'เก่งเรื่องนี้มาแต่เกิดจริงๆ'", o: [
+                    { t: "ยิ้มรับและภูมิใจว่าเรื่องนี้ฉันเหนือกว่าคนอื่นจริงๆ", w: { f: 4, g: 1 } },
+                    { t: "ดีใจมาก และรู้สึกว่าไม่ต้องซ้อมอะไรมากก็ทำได้ดีอยู่แล้ว", w: { f: 5, g: 0 } },
+                    { t: "ดีใจ แต่ก็รู้ตัวว่าถ้าทิ้งไปนานๆ ก็ฝืดได้เหมือนกัน", w: { f: 2, g: 3 } },
+                    { t: "ขอบคุณ แต่บอกเขาว่าผ่านการฝึกซ้อมมาอย่างหนักหน่วงนะ", w: { f: 1, g: 4 } },
+                    { t: "อธิบายว่าเพิ่งเริ่มทำได้ดี ยังมีเทคนิคอีกเยอะที่ต้องเรียนเพิ่ม", w: { f: 0, g: 5 } }
+                ]
+            },
+            {
+                q: "คุณกำลังสอนงานให้เพื่อนร่วมทีมคนใหม่ แต่เขาสอนเท่าไหร่ก็ไม่จำ", o: [
+                    { t: "สรุปไปเลยว่าเขาหัวทึบ และไม่เหมาะกับงานนี้", w: { f: 5, g: 0 } },
+                    { t: "รู้สึกรำคาญ และแย่งมาทำเองให้จบๆ ไป", w: { f: 4, g: 1 } },
+                    { t: "บ่นให้เขาฟังนิดหน่อย แล้วสอนแบบเดิมซ้ำๆ หย่อนๆ หน่อย", w: { f: 3, g: 2 } },
+                    { t: "ลองเปลี่ยนวิธีสอน หรือหาวิดีโอ/คู่มือมาให้เขาลองศึกษาแทน", w: { f: 1, g: 4 } },
+                    { t: "ถามเขาว่าติดตรงไหน หรือเขาชอบวิธีเรียนรู้แบบไหน แล้วปรับให้ตามใจเขา", w: { f: 0, g: 5 } }
+                ]
+            },
+            {
+                q: "เวลาทำข้อสอบแล้วเจอข้อที่ยากจนคิดไม่ออก คุณมักจะ...", o: [
+                    { t: "ข้ามไปเลยแล้วไม่กลับมาทำ คิดว่ายังไงก็ไม่ได้", w: { f: 5, g: 0 } },
+                    { t: "กาเดาไปมั่วๆ แล้วรีบส่งกระดาษคำตอบ", w: { f: 4, g: 1 } },
+                    { t: "นั่งจ้องมันไปเรื่อยๆ จนหมดเวลา", w: { f: 3, g: 2 } },
+                    { t: "ข้ามไปทำข้ออื่นก่อน แล้วกลับมาแกะสูตรหรือลองใช้ตรรกะตัดช้อยส์", w: { f: 1, g: 4 } },
+                    { t: "ทดลองวิธีคิดหลายๆ แบบจนกว่าจะเจอจุดเชื่อมโยง", w: { f: 0, g: 5 } }
+                ]
+            },
+            {
+                q: "กิจกรรมเวลาว่างที่คุณเปิดรับมากที่สุดคืออะไร?", o: [
+                    { t: "สิ่งที่ทำเก่งอยู่แล้ว จะได้รู้สึกมั่นใจตลอดเวลา", w: { f: 5, g: 0 } },
+                    { t: "ทำอะไรก็ได้ที่ใช้ความคิดน้อยที่สุด เพื่อพักสมอง", w: { f: 3, g: 2 } },
+                    { t: "ดูซีรีส์ เล่นเกม หรือเสพโซเชียลไปวันๆ โดยไม่ได้คิดอะไร", w: { f: 4, g: 1 } },
+                    { t: "ลองทำงานอดิเรกใหม่ๆ ที่ไม่เคยทำ แม้จะทำออกมาไม่ดีในตอนแรก", w: { f: 1, g: 4 } },
+                    { t: "ท้าทายตัวเองด้วยการตั้งเป้าหมายในทักษะใหม่ เช่น อบขนม เขียนโค้ด", w: { f: 0, g: 5 } }
+                ]
+            },
+            {
+                q: "เมื่อคุณพยายามวาดรูป แต่ผลงานออกมาแย่กว่าที่หวังไว้มาก", o: [
+                    { t: "ฉีกทิ้ง แล้วบอกตัวเองว่า 'เราไม่มีหัวศิลปะ'", w: { f: 5, g: 0 } },
+                    { t: "ถ่ายลงสตอรี่ขำๆ ให้คนหัวเราะ แล้วก็ไม่วาดรูปอีกเลย", w: { f: 4, g: 1 } },
+                    { t: "เก็บไว้ดูเล่น แต่คงไม่เอาไปโชว์ใคร", w: { f: 3, g: 2 } },
+                    { t: "เปรียบเทียบรูปตอนร่างกับตอนสุดท้าย เพื่อดูว่าพลาดตรงไหน", w: { f: 1, g: 4 } },
+                    { t: "เปิด YouTube ดูเทคนิคพื้นฐาน แล้วลองวาดใหม่ตั้งแต่ต้นเบสิก", w: { f: 0, g: 5 } }
+                ]
+            },
+            {
+                q: "บทบาทของคุณในเกมที่มีการแข่งขันจัดอันดับ (Ranked Match)", o: [
+                    { t: "ถ้าเห็นทีมเสียเปรียบ จะกดยอมแพ้เลย ไม่ชอบเสียเวลา", w: { f: 5, g: 0 } },
+                    { t: "ด่าทีม โทษคนอื่นเวลาแพ้ เพื่อรักษาอีโก้ตัวเอง", w: { f: 4, g: 1 } },
+                    { t: "เล่นเซฟๆ เฉพาะตัวละครที่ถนัดที่สุด ไม่ยอมลองตัวใหม่", w: { f: 3, g: 2 } },
+                    { t: "สู้จนหยดสุดท้าย และวิเคราะห์หลังจากเกมจบว่าทำไมถึงแพ้/ชนะ", w: { f: 0, g: 5 } },
+                    { t: "ฝึกเล่นหลายๆ ตำแหน่ง เพื่อที่จะแก้ทางและอุดรอยรั่วให้ทีม", w: { f: 1, g: 4 } }
+                ]
+            },
+            {
+                q: "เมื่อต้องตัดสินใจในเรื่องสำคัญที่คุณไม่มีประสบการณ์", o: [
+                    { t: "โยนการตัดสินใจให้คนอื่น ถ้าพลาดจะได้ไม่ต้องรับผิดชอบ", w: { f: 5, g: 0 } },
+                    { t: "เลือกตัวเลือกที่ปลอดภัยที่สุด แม้จะให้ผลลัพธ์น้อย", w: { f: 4, g: 1 } },
+                    { t: "กังวลมาก จนใช้เวลาคิดนานจนเกินไป", w: { f: 3, g: 2 } },
+                    { t: "ปรึกษาผู้มีประสบการณ์ ถามข้อดีข้อเสียก่อนตัดสินใจ", w: { f: 1, g: 4 } },
+                    { t: "หาข้อมูลเชิงลึก ลงมือทำ และพร้อมรับแผนสำรองหากผิดพลาด", w: { f: 0, g: 5 } }
+                ]
+            },
+            {
+                q: "คุณคิดยังไงกับคำว่า 'พรสวรรค์'?", o: [
+                    { t: "คือทุกสิ่ง ถ้าไม่มีก็แทบจะสู้คนที่เขามีไม่ได้เลย", w: { f: 5, g: 0 } },
+                    { t: "สำคัญมาก คนมีพรสวรรค์ทำอะไรก็ง่ายไปหมด", w: { f: 4, g: 1 } },
+                    { t: "ส่วนหนึ่ง แต่เชื่อว่าคนธรรมดาก็พอจะถูไถไปได้", w: { f: 3, g: 2 } },
+                    { t: "เป็นแค่จุดเริ่มต้น ถ้าไม่ฝึกฝน พรสวรรค์ก็ไร้ค่า", w: { f: 1, g: 4 } },
+                    { t: "แทบไม่เกี่ยว ความพยายามและความมีวินัยต่างหากคือตัวกำหนด", w: { f: 0, g: 5 } }
+                ]
+            },
+            {
+                q: "เวลาที่คุณอธิบายเรื่องบางอย่างให้คนอื่นฟังแล้วเขาไม่เข้าใจ", o: [
+                    { t: "คิดว่าคนฟังหัวช้าเกินไป", w: { f: 5, g: 0 } },
+                    { t: "รู้สึกว่าตัวเองไม่มีทักษะการสอน เลยเลิกพูด", w: { f: 4, g: 1 } },
+                    { t: "พยายามพูดประโยคเดิมให้เสียงดังขึ้น", w: { f: 3, g: 2 } },
+                    { t: "ลองยกตัวอย่างเปรียบเทียบกับเรื่องใกล้ตัวให้ง่ายขึ้น", w: { f: 1, g: 4 } },
+                    { t: "ถามเขาว่าติดตรงไหน แล้วลองวาดภาพหรือหาโครงสร้างอธิบายใหม่", w: { f: 0, g: 5 } }
+                ]
+            },
+            {
+                q: "การลงทุนครั้งแรกของคุณขาดทุนไปครึ่งหนึ่ง สิ่งที่คุณคิดคือ...", o: [
+                    { t: "ตลาดนี้มันหลอกลวง ถอนเงินออกมาและไม่เล่นอีก", w: { f: 5, g: 0 } },
+                    { t: "โทษสภาพเศรษฐกิจ รัฐบาล หรือดวงที่ไม่ดี", w: { f: 4, g: 1 } },
+                    { t: "ทนถือไปเรื่อยๆ หวังว่าสักวันมันคงกลับมาเอง", w: { f: 3, g: 2 } },
+                    { t: "ยอมรับว่าตัวเองยังรู้ไม่พอ และเริ่มศึกษาพื้นฐานการเงินอย่างจริงจัง", w: { f: 0, g: 5 } },
+                    { t: "จดบันทึกความผิดพลาด (Trade Journal) แล้วปรับกลยุทธ์ใหม่", w: { f: 1, g: 4 } }
+                ]
+            },
+            {
+                q: "คุณได้รับมอบหมายให้เป็นผู้นำทีม ทั้งที่ไม่เคยเป็นมาก่อน", o: [
+                    { t: "ปฏิเสธทันที เพราะกลัวพาลูกน้องไปเละเทะ", w: { f: 5, g: 0 } },
+                    { t: "รับมาทำแบบไม่เต็มใจ และทำตัวเจ้านายสั่งงานอย่างเดียว", w: { f: 4, g: 1 } },
+                    { t: "พยายามทำตัวกลมกลืนกับลูกทีม ไม่กล้าตัดสินใจอะไรเด็ดขาด", w: { f: 3, g: 2 } },
+                    { t: "ตื่นเต้น และเปิดใจคุยกับลูกทีมตั้งแต่วันแรกเพื่อหาแนวทางร่วมกัน", w: { f: 1, g: 4 } },
+                    { t: "อ่านหนังสือหรือขอคำแนะนำเรื่อง Leadership เพื่อนำมาปรับใช้", w: { f: 0, g: 5 } }
+                ]
+            },
+            {
+                q: "คุณใช้เวลาซ้อมร้องเพลงมานาน แต่ตอนประกวดกลับตกรอบแรก", o: [
+                    { t: "เลิกร้องเพลง คิดว่าฝืนไปก็ไม่รุ่ง", w: { f: 5, g: 0 } },
+                    { t: "บอกเพื่อนว่าจริงๆ กรรมการตาไม่ถึง", w: { f: 4, g: 1 } },
+                    { t: "รู้สึกอายเวที และคงไม่ลงแข่งรายการหน้าอีกสักพัก", w: { f: 3, g: 2 } },
+                    { t: "ขอคอมเมนต์จากกรรมการเพื่อนำไปซ้อมเทคนิคที่ตัวเองยังพลาด", w: { f: 0, g: 5 } },
+                    { t: "อัดคลิปการแสดงของตัวเองกลับมาดูว่าตรงไหนที่เพี้ยนหรือขาดอินเนอร์", w: { f: 1, g: 4 } }
+                ]
+            },
+            {
+                q: "เมื่อเพื่อนร่วมงานทำงานพลาดจนส่งผลกระทบต่อทีม", o: [
+                    { t: "ตำหนิเขาอย่างรุนแรงว่าทำไมถึงทำให้ฉันเดือดร้อน", w: { f: 5, g: 0 } },
+                    { t: "ฟ้องหัวหน้าทันที เพื่อป้องกันตัวเองให้พ้นผิด", w: { f: 4, g: 1 } },
+                    { t: "หงุดหงิดแต่ไม่พูดอะไร ยอมจำใจแก้ปัญหาไปเงียบๆ", w: { f: 3, g: 2 } },
+                    { t: "ช่วยเขาแก้ไขสถานการณ์เฉพาะหน้า ก่อนจะหาสาเหตุรวมกัน", w: { f: 1, g: 4 } },
+                    { t: "ช่วยกันแก้ปัญหา แล้วตั้งระบบเช็คข้อผิดพลาดในทีมป้องกันซ้ำสอง", w: { f: 0, g: 5 } }
+                ]
+            },
+            {
+                q: "ถ้าคุณได้รับเลือกให้ทดลองใช้โปรแกรมใหม่ของออฟฟิศ", o: [
+                    { t: "บ่นว่าโปรแกรมเก่าก็ดีอยู่แล้ว จะเปลี่ยนให้ยุ่งยากทำไม", w: { f: 5, g: 0 } },
+                    { t: "ใช้เวลาเรียนรู้นานกว่าจะยอมกดเข้าโปรแกรม แถมไม่อยากใช้เลย", w: { f: 4, g: 1 } },
+                    { t: "ใช้ๆ ไปตามที่เขาสอน แต่ไม่คิดหาฟังก์ชั่นแปลกๆ เพิ่ม", w: { f: 3, g: 2 } },
+                    { t: "กดเล่นไปเรื่อยๆ เพื่อดูว่ามันช่วยลัดขั้นตอนอะไรบ้าง", w: { f: 1, g: 4 } },
+                    { t: "เรียนรู้ด้วยความอยากรู้ และรวบรวมทริคเจ๋งๆ ไปเล่าให้ฝ่ายอื่นฟัง", w: { f: 0, g: 5 } }
+                ]
+            },
+            {
+                q: "คุณรู้ตัวดีว่าคุณไม่เก่งวิชาคณิตศาสตร์เลย", o: [
+                    { t: "บอกเลี่ยงทุกอย่างที่เกี่ยวกับตัวเลข และปิดสมองทันที", w: { f: 5, g: 0 } },
+                    { t: "ลอกเพื่อน หรือจ้างคนอื่นทำเวลามีงานเกี่ยวกับเลข", w: { f: 4, g: 1 } },
+                    { t: "จำสูตรไปสอบแบบนกแก้วนกขุนทอง พอสอบเสร็จก็ลืม", w: { f: 3, g: 2 } },
+                    { t: "เริ่มจากการทำโจทย์ง่ายๆ ที่สุด เพื่อสร้างความเข้าใจใหม่", w: { f: 1, g: 4 } },
+                    { t: "บอกตัวเองว่ามันเป็นภาษาๆ หนึ่ง และพยายามเข้าใจตรรกะของมัน", w: { f: 0, g: 5 } }
+                ]
+            },
+            {
+                q: "เป้าหมายหลักในการเรียนรู้เรื่องใหม่ๆ ของคุณคือ...", o: [
+                    { t: "เพื่อให้ได้คะแนนดี และมีใบรับรอง", w: { f: 4, g: 1 } },
+                    { t: "เพื่อให้เพื่อนคิดว่าเราเก่งและฉลาด", w: { f: 5, g: 0 } },
+                    { t: "ทำๆ ไปตามกระแส เขาเรียนกันก็เรียนบ้าง", w: { f: 3, g: 2 } },
+                    { t: "เพื่อพัฒนาทักษะตนเองให้ก้าวหน้าไปอีกขั้น", w: { f: 1, g: 4 } },
+                    { t: "เพราะสนุกกับกระบวนการที่ได้ทำความเข้าใจสิ่งที่ไม่เคยรู้", w: { f: 0, g: 5 } }
+                ]
+            },
+            {
+                q: "เมื่อคุณแพ้เดิมพันหรือเล่นกีฬาแพ้เพื่อน", o: [
+                    { t: "อารมณ์เสีย พุพาน พาลคนอื่นไปทั่วชั่วโมง", w: { f: 5, g: 0 } },
+                    { t: "แก้ตัวสารพัด 'รองเท้าไม่ดี วันนี้แดดแยงตา กินข้าวอิ่มไป'", w: { f: 4, g: 1 } },
+                    { t: "เซ็งๆ แล้วบอกว่าไม่เล่นเกมนี้อีกแล้ว", w: { f: 3, g: 2 } },
+                    { t: "ยอมรับความพ่ายแพ้ และชื่นชมเทคนิคของเพื่อน", w: { f: 1, g: 4 } },
+                    { t: "ขอแก้มือใหม่ในรอบหน้า และถามตัวเองว่าต้องแก้จุดไหน", w: { f: 0, g: 5 } }
+                ]
+            },
+            {
+                q: "ถ้าต้องเลือก 'สโลแกนประจำใจ'", o: [
+                    { t: "'ความพยายามอยู่ที่ไหน ความตายอยู่ที่นั่น'", w: { f: 5, g: 0 } },
+                    { t: "'เก่งไม่กลัว กลัวคนเกิดมาพร้อม'", w: { f: 4, g: 1 } },
+                    { t: "'ทำดีที่สุดแล้ว ก็ปล่อยไปตามเวรตามกรรม'", w: { f: 3, g: 2 } },
+                    { t: "'ทุกอย่างเป็นไปได้ ถ้าเราตั้งใจพอ'", w: { f: 1, g: 4 } },
+                    { t: "'ยิ่งล้มเยอะ ยิ่งโตไว ยิ่งเรียนรู้'", w: { f: 0, g: 5 } }
+                ]
+            },
+            {
+                q: "มีคนบอกว่า 'การเป็นคนมี Growth Mindset นั้นเหนื่อยเกินไป'", o: [
+                    { t: "เห็นด้วยสุดๆ อยู่แบบชิลๆ ในเซฟโซนดีกว่าเยอะ", w: { f: 5, g: 0 } },
+                    { t: "จริง ใครจะไปพลังล้นเหลือพัฒนาตัวเองได้ตลอดเวลา", w: { f: 4, g: 1 } },
+                    { t: "ก็คงจริงแหละ แต่ก็ต้องทำมาหากินเลยต่องทน", w: { f: 3, g: 2 } },
+                    { t: "ก็เหนื่อย แต่ผลลัพธ์คุ้มค่ากว่าการย่ำอยู่กับที่", w: { f: 1, g: 4 } },
+                    { t: "ไม่เหนื่อยเลย มันเป็นวิถีชีวิตที่สนุกกับการเติบโตมากกว่า", w: { f: 0, g: 5 } }
+                ]
+            },
+            {
+                q: "เมื่อเจอคนที่คิดต่างแบบสุดขั้วในเรื่องการเมืองหรือสังคม", o: [
+                    { t: "ตัดสินว่าเขาโง่ และด่าทอทันทีแบบไม่ต้องคุย", w: { f: 5, g: 0 } },
+                    { t: "ไม่คุยด้วยและเลิกคบ เพราะคุยไปก็ไม่รู้เรื่อง", w: { f: 4, g: 1 } },
+                    { t: "รับฟังผ่านๆ แต่ข้างในยังยึดติดว่าเราถูก 100%", w: { f: 3, g: 2 } },
+                    { t: "พยายามทำความเข้าใจ ว่าทำไมเขาถึงมีมุมมองแบบนั้น", w: { f: 0, g: 5 } },
+                    { t: "แลกเปลี่ยนความเห็นด้วยเหตุผล พร้อมเปิดใจว่าข้อมูลเราอาจจะผิดก็ได้", w: { f: 0, g: 5 } }
+                ]
+            }
+        ];
+
+        /* =======================================
+           2. CAREERS DATABASE
+           ======================================= */
+        const CAREERS = [
+            { icon: "💻", name: "Software Engineer", desc: "แก้ปัญหา บั๊กคือเรื่องปกติ เรียนรู้ Tech ใหม่เสมอ", gWeight: 0.9, fWeight: 0.1 },
+            { icon: "🚀", name: "Startup Founder", desc: "ล้มลุกคลุกคลาน ทนต่อความล้มเหลวแบบนับไม่ถ้วน", gWeight: 1.0, fWeight: 0.0 },
+            { icon: "📊", name: "Data Analyst", desc: "วิเคราะห์หาสาเหตุ ตั้งสมมติฐานและทดลองซ้ำๆ", gWeight: 0.8, fWeight: 0.2 },
+            { icon: "🎨", name: "UX/UI Designer", desc: "พร้อมรับ Feedback งานโดนแก้คือเรื่องธรรมชาติ", gWeight: 0.85, fWeight: 0.15 },
+            { icon: "💼", name: "Project Manager", desc: "จัดการความเปลี่ยนแปลงที่คาดเดาไม่ได้", gWeight: 0.7, fWeight: 0.3 },
+            { icon: "📚", name: "Academic Researcher", desc: "ทดลอง วิจัย ทดสอบหาความจริงใหม่ๆ เสมอ", gWeight: 0.8, fWeight: 0.2 },
+            { icon: "📈", name: "Quality Assurance", desc: "ทำงานตามขอบเขตและกฎเกณฑ์ที่แน่ชัด", gWeight: 0.3, fWeight: 0.7 },
+            { icon: "🏦", name: "Accountant (Auditor)", desc: "ยึดติดกับกฎระเบียบ ความถูกต้อง 100% คือสิ่งสำคัญ", gWeight: 0.2, fWeight: 0.8 },
+            { icon: "🛡️", name: "Risk Manager", desc: "เน้นความปลอดภัย ระมัดระวัง ไม่ชอบเรื่องเหนือความคาดหมาย", gWeight: 0.4, fWeight: 0.6 },
+            { icon: "📑", name: "Administrator", desc: "ทำงาน Routine ได้ดีเยี่ยม ไม่ชอบความเปลี่ยนแปลง", gWeight: 0.1, fWeight: 0.9 }
+        ];
+
+        /* =======================================
+           3. AUDIO ENGINE (Synthesizer to avoid files)
+           ======================================= */
+        let audioCtx;
+        function playSound(type) {
+            if (!SETTINGS.sound) return;
+            try {
+                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                if (type === 'click') {
+                    // Soft pop
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(400, audioCtx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(800, audioCtx.currentTime + 0.05);
+                    gain.gain.setValueAtTime(0.5, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.1);
+                } else if (type === 'success') {
+                    // Chime
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+                    osc.frequency.setValueAtTime(800, audioCtx.currentTime + 0.1);
+                    osc.frequency.setValueAtTime(1200, audioCtx.currentTime + 0.2);
+                    gain.gain.setValueAtTime(0.6, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.6);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.6);
+                } else if (type === 'gacha-build') {
+                    // Ascending pitch
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(50, audioCtx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(800, audioCtx.currentTime + 5.5);
+                    gain.gain.setValueAtTime(0, audioCtx.currentTime);
+                    gain.gain.linearRampToValueAtTime(0.2, audioCtx.currentTime + 5.0);
+                    gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 5.5);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 5.5);
+                }
+            } catch (e) { console.log("Audio not supported"); }
+        }
+
+        /* =======================================
+           4. SYSTEM STATE & LOGIC
+           ======================================= */
+        let state = {
+            questionsToPlay: [],
+            answers: [], // store selected index and score for 'back'
+            currentIndex: 0,
+            scores: { g: 0, f: 0 },
+            timerRef: null,
+            timeLeft: 30
+        };
+
+        const SETTINGS = {
+            theme: 'dark',
+            timer: false,
+            sound: true,
+            speed: 1, // 0=fast, 1=normal, 2=slow
+            animStyle: 'slide',
+            bgStyle: 'none',
+            uiStyle: 'flat'
+        };
+
+        function changeAnimStyle(style) { SETTINGS.animStyle = style; applySettings(); }
+        function changeBgStyle(style) { SETTINGS.bgStyle = style; applySettings(); }
+        function changeUiStyle(style) { SETTINGS.uiStyle = style; applySettings(); }
+
+        function shuffleArray(array) {
+            let curId = array.length;
+            while (0 !== curId) {
+                let randId = Math.floor(Math.random() * curId);
+                curId -= 1;
+                let tmp = array[curId];
+                array[curId] = array[randId];
+                array[randId] = tmp;
+            }
+            return array;
+        }
+
+        // --- SETUP UI ---
+        function applySettings() {
+            document.body.setAttribute('data-theme', SETTINGS.theme);
+            document.getElementById('set-theme').checked = SETTINGS.theme === 'dark';
+            document.getElementById('set-timer').checked = SETTINGS.timer;
+            document.getElementById('set-sound').checked = SETTINGS.sound;
+            document.getElementById('set-speed').value = SETTINGS.speed;
+
+            const animSelect = document.getElementById('set-anim-style');
+            if (animSelect) animSelect.value = SETTINGS.animStyle;
+            document.body.setAttribute('data-anim', SETTINGS.animStyle);
+
+            const bgSelect = document.getElementById('set-bg-style');
+            if (bgSelect) bgSelect.value = SETTINGS.bgStyle;
+            document.body.setAttribute('data-bg', SETTINGS.bgStyle);
+
+            const uiSelect = document.getElementById('set-ui-style');
+            if (uiSelect) uiSelect.value = SETTINGS.uiStyle;
+            document.body.setAttribute('data-ui', SETTINGS.uiStyle);
+
+            let cssSpeed = 1;
+            if (SETTINGS.speed == 0) cssSpeed = 0.5;
+            if (SETTINGS.speed == 1) cssSpeed = 1;
+            if (SETTINGS.speed == 2) cssSpeed = 2;
+            document.documentElement.style.setProperty('--anim-speed', cssSpeed);
+        }
+
+        // --- MENU CONTROL ---
+        let menuOpen = false;
+        function toggleMenu() {
+            playSound('click');
+            menuOpen = !menuOpen;
+            const trigger = document.getElementById('navTrigger');
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+
+            if (menuOpen) {
+                trigger.classList.add('open');
+                sidebar.classList.add('open');
+                overlay.classList.add('active');
+            } else {
+                trigger.classList.remove('open');
+                sidebar.classList.remove('open');
+                overlay.classList.remove('active');
+            }
+        }
+
+        function navigateHome() {
+            toggleMenu();
+            openDialog("กลับหน้าหลัก?", "ความคืบหน้าของควิซจะถูกรีเซ็ต", () => {
+                showScreen('screen-start');
+            });
+        }
+
+        // --- SCREEN CONTROL ---
+        function showScreen(id) {
+            document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            // reset scroll if needed
+            document.getElementById(id).scrollTop = 0;
+        }
+
+        /* =======================================
+           5. QUIZ ENGINE
+           ======================================= */
+        function startQuiz() {
+            playSound('click');
+
+            // Randomize 20 Qs
+            let shuffledBank = shuffleArray([...QUESTION_BANK]);
+            state.questionsToPlay = shuffledBank.slice(0, 20);
+
+            // Shuffle options for each question
+            state.questionsToPlay.forEach(q => {
+                q.o = shuffleArray([...q.o]);
+            });
+
+            state.currentIndex = 0;
+            state.scores = { g: 0, f: 0 };
+            state.answers = [];
+
+            showScreen('screen-quiz');
+            renderQuestion();
+        }
+
+        function resetTimer() {
+            if (state.timerRef) clearInterval(state.timerRef);
+            const timerEl = document.getElementById('quiz-timer');
+
+            if (!SETTINGS.timer) {
+                timerEl.style.display = 'none';
+                return;
+            }
+
+            timerEl.style.display = 'block';
+            state.timeLeft = 30;
+            updateTimerUI();
+
+            state.timerRef = setInterval(() => {
+                state.timeLeft--;
+                updateTimerUI();
+                if (state.timeLeft <= 0) {
+                    clearInterval(state.timerRef);
+                    // Time up -> choose randomly or give 0? Let's just penalize fixed slightly
+                    processAnswer({ f: 3, g: 0 }); // time up penalty assumption
+                }
+            }, 1000);
+        }
+
+        function updateTimerUI() {
+            const timerEl = document.getElementById('quiz-timer');
+            timerEl.textContent = `00:${state.timeLeft.toString().padStart(2, '0')}`;
+            if (state.timeLeft <= 5) timerEl.style.color = "var(--danger)";
+            else timerEl.style.color = "var(--warning)";
+        }
+
+        function renderQuestion() {
+            const index = state.currentIndex;
+            const qData = state.questionsToPlay[index];
+
+            // Update Progress
+            document.getElementById('quiz-progress-text').textContent = `ข้อ ${index + 1} / 20`;
+            const pct = ((index + 1) / 20) * 100;
+            document.getElementById('quiz-progress-bar').style.width = pct + '%';
+
+            // Timer
+            resetTimer();
+
+            // Setup Text
+            const qEl = document.getElementById('question-text');
+            qEl.style.opacity = 0;
+            qEl.style.transform = 'translateY(10px)';
+
+            setTimeout(() => {
+                qEl.textContent = qData.q;
+                qEl.style.opacity = 1;
+                qEl.style.transform = 'translateY(0)';
+            }, 200 * (SETTINGS.speed == 0 ? 0.3 : 1));
+
+            // Setup Options
+            const optsContainer = document.getElementById('options-container');
+            optsContainer.innerHTML = '';
+
+            const labels = ['A', 'B', 'C', 'D', 'E'];
+
+            qData.o.forEach((opt, i) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerHTML = `<span class="option-label">${labels[i]}</span> <span>${opt.t}</span>`;
+
+                // Add click event
+                btn.onclick = function (e) {
+                    if (optsContainer.classList.contains('locked')) return;
+                    optsContainer.classList.add('locked');
+
+                    playSound('click');
+
+                    // Ripple effect
+                    const rect = btn.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const ripple = document.createElement('span');
+                    ripple.className = 'ripple';
+                    ripple.style.left = x + 'px';
+                    ripple.style.top = y + 'px';
+                    btn.appendChild(ripple);
+
+                    btn.classList.add('selected');
+
+                    setTimeout(() => processAnswer(opt.w), 600); // UI wait
+                };
+
+                // Entrance animation
+                btn.style.opacity = '0';
+                btn.style.transform = 'translateY(15px)';
+                optsContainer.appendChild(btn);
+
+                setTimeout(() => {
+                    btn.style.transition = `all calc(0.3s * var(--anim-speed)) ease, opacity calc(0.3s * var(--anim-speed))`;
+                    btn.style.opacity = '1';
+                    btn.style.transform = 'translateY(0)';
+                }, (100 * i) * (SETTINGS.speed == 0 ? 0.3 : 1));
+            });
+
+            optsContainer.classList.remove('locked');
+        }
+
+        function processAnswer(weights) {
+            if (state.timerRef) clearInterval(state.timerRef);
+
+            // Record
+            state.scores.g += weights.g;
+            state.scores.f += weights.f;
+            state.answers.push(weights);
+
+            // Next
+            state.currentIndex++;
+            if (state.currentIndex >= 20) {
+                goLoading();
+            } else {
+                renderQuestion();
+            }
+        }
+
+        function goBack() {
+            if (state.currentIndex === 0) {
+                openDialog("กลับหน้าแรก?", "ระบบจะยกเลิกการทดสอบครั้งนี้", () => {
+                    showScreen('screen-start');
+                });
+                return;
+            }
+
+            playSound('click');
+            state.currentIndex--;
+            const lastW = state.answers.pop();
+            // restore scores
+            state.scores.g -= lastW.g;
+            state.scores.f -= lastW.f;
+            renderQuestion();
+        }
+
+        /* =======================================
+           6. LOADING & RESULT ENGINE
+           ======================================= */
+        function goLoading() {
+            showScreen('screen-loading');
+            playSound('success');
+
+            const facts = [
+                "รู้หรือไม่? สมองสามารถสร้างเซลล์สื่อประสาทใหม่ได้เมื่อเราเจอความท้าทาย",
+                "คนที่ Growth Mindset จะหลั่งโดปามีน (สารแห่งความสุข) เมื่อได้ 'เรียนรู้' ไม่ใช่ตอนที่ 'ทำได้ง่ายๆ'",
+                "การเปลี่ยนคำว่า 'ฉันทำไม่ได้' เป็นคำว่า 'ฉันยังทำไม่ได้ตอนนี้' สามารถเปลี่ยนพฤติกรรมได้จริง",
+                "กำลังวิเคราะห์ข้อมูลกับฐานข้อมูลสายอาชีพ..."
+            ];
+
+            let fIndex = 0;
+            const factEl = document.getElementById('loading-fact');
+
+            // facts rotation
+            const fRotator = setInterval(() => {
+                fIndex = (fIndex + 1) % facts.length;
+                factEl.style.opacity = 0;
+                setTimeout(() => {
+                    factEl.textContent = facts[fIndex];
+                    factEl.style.opacity = 1;
+                }, 300);
+            }, 1000);
+
+            // progress bar
+            const bar = document.getElementById('loading-bar');
+            bar.style.transition = 'width 2.5s ease-in-out';
+            setTimeout(() => { bar.style.width = '100%'; }, 100);
+
+            // Finish
+            setTimeout(() => {
+                clearInterval(fRotator);
+                calculateEngine();
+            }, 2800);
+        }
+
+        function animateValue(id, start, end, duration) {
+            const obj = document.getElementById(id);
+            if (!obj) return;
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                const easeOut = progress * (2 - progress);
+                obj.innerText = Math.floor(easeOut * (end - start) + start);
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                } else {
+                    obj.innerText = end;
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+
+        function calculateEngine() {
+            const maxScore = 20 * 5; // 20 Qs * 5 max weight = 100 
+            const g = state.scores.g;
+            const f = state.scores.f;
+
+            // Normalize to %
+            const total = g + f;
+            if (total === 0) return; // safeguard
+
+            let gPct = Math.round((g / total) * 100);
+            let fPct = 100 - gPct;
+
+            // Condition logic
+            let title, sub, emoji, desc, strengthArr, weaknessArr, adviceArr, rarityText;
+            let storyBgClass, storyText1, storyText2;
+
+            if (gPct >= 80) {
+                storyBgClass = "bg-extreme";
+                storyText1 = "หยาดเหงื่อ... คราบน้ำตา... และความล้มเหลวนับครั้งไม่ถ้วน...";
+                storyText2 = "หล่อหลอมคุณจนแข็งแกร่ง... ออกไปบุกอวกาศอันไร้ขีดจำกัด...";
+                emoji = "🚀"; title = "Extreme Growth"; sub = "ผู้หลงใหลในการอัปเลเวล"; rarityText = "🏆 Top 5% ในสังคม";
+                desc = "คุณมักจะยินดีรับความท้าทายใหม่ๆ เสมอ เช่น เวลาได้รับงานที่ไม่เคยทำ คุณจะมองว่าเป็นโอกาสเรียนรู้มากกว่ากลัวพลาด คุณเชื่อสุดหัวใจว่าความพยายามคือสะพานสู่ความสำเร็จ!";
+                strengthArr = ["เรียนรู้เร็ว ไม่หยุดนิ่ง", "ปรับตัวเก่งในสถานการณ์วิกฤต", "เป็นแรงบันดาลใจให้คนรอบข้างบ่อยๆ"];
+                weaknessArr = ["บางครั้งคุณกดดันตัวเองมากไปจนลืมพักผ่อน", "จู้จี้หรือคาดหวังสูงกับเพื่อนร่วมงานโดยไม่รู้ตัว"];
+                adviceArr = ["เว้นระยะให้ตัวเองพักเหนื่อยบ้าง ความสำเร็จไม่จำเป็นต้องรีบเสมอไป", "ระวังการด่วนตัดสินใจคนที่เรียนรู้ช้ากว่า พยายามเข้าใจจังหวะของคนอื่น", "ฉลองเป้าหมายเล็กๆ (Small wins) รอดูกระบวนการมากกว่าตัวเลขอาร์โอไอผลลัพธ์"];
+            } else if (gPct >= 60) {
+                storyBgClass = "bg-growth";
+                storyText1 = "โลกกว้างใบนี้... ยังมีอะไรให้ไขว่คว้าอีกมาก...";
+                storyText2 = "ออกไปใช้ชีวิต... เพื่อพัฒนาเป็นคุณในเวอร์ชันที่ดีกว่าเดิม...";
+                emoji = "🌱"; title = "Growth Mindset"; sub = "นักเรียนรู้พลังบวก"; rarityText = "🥇 Top 30% ของผู้คน";
+                desc = "คุณมักจะเปิดรับการพัฒนาและบทเรียนใหม่ๆ เช่น หากเรียนภาษาผิดพลาด คุณจะหาเทคนิคใหม่ๆ มาปรับใช้ แม้จะมีบางครั้งที่คุณแอบกลัวล้มเหลวอยู่บ้าง แต่สุดท้ายเหตุผลก็ชนะ";
+                strengthArr = ["เปิดรับคำวิจารณ์เพื่อนำมาพัฒนา", "ไม่ยอมแพ้เมื่อเจอโจทย์ที่ยากลิบลิ่ว", "มีความสัมพันธ์ที่ดีกับเพื่อนร่วมงานเพราะอีโก้ต่ำ"];
+                weaknessArr = ["ลึกๆ คุณยังเผลอเปรียบเทียบตัวเองกับคนอื่นทำให้ไขว้เขว", "บางทีก็หมดพลังงานง่ายๆ ถ้าเจอเสียงวิจารณ์ที่รุนแรงเกินไป"];
+                adviceArr = ["โฟกัสที่การเติบโตของตัวเองเทียบกับเมื่อวานก็พอ เลิกมองคนอื่น", "กล้าที่จะลองทำสิ่งที่เสี่ยงกว่าที่เป็นอยู่", "หา Mentor เก่งๆ ไว้คอยชี้แนะ จะช่วยให้คุณก้าวเร็วขึ้นและมั่นใจ"];
+            } else if (fPct >= 60) {
+                storyBgClass = "bg-fixed";
+                storyText1 = "ข้อมูลต้องแม่นยำ... ความเป็นไปได้ต้องจับต้องได้ 100%...";
+                storyText2 = "ออฟฟิศแห่งความเป็นจริง... คือเซฟโซนที่ขับเคลื่อนความสำเร็จของคุณ...";
+                emoji = "🛡️"; title = "Fixed Mindset"; sub = "ผู้แสวงหาความมั่นคง"; rarityText = "🥈 กลุ่มคนทั่วไปในสังคม";
+                desc = "คุณมักจะเลือกทำสิ่งที่ถนัดและชัวร์ไว้ก่อน เช่น ถ้าตั้งใจลดน้ำหนักแล้วไม่เห็นผล คุณมักจะท้อและล้มเลิกง่าย คุณชอบอะไรที่คาดเดาได้และชำนาญแล้ว";
+                strengthArr = ["มีความเสถียร ซื่อตรงต่อกฎเกณฑ์", "ตรวจสอบอย่างรอบคอบก่อนลงมือทำเสมอ", "มีความรับผิดชอบสูงในงานรูทีนที่คุ้นเคย"];
+                weaknessArr = ["ปฏิเสธโอกาสดีๆ เพียงเพราะกลัวทำออกมาไม่เพอร์เฟกต์", "มองปัญหาว่าเป็นข้อจำกัดที่ข้ามไม่ได้ และเสียกำลังใจเร็ว"];
+                adviceArr = ["อนุญาตให้ตัวเองทำพลาดได้บ้าง ความผิดพลาดคือการเรียนรู้", "เปลี่ยนคำว่า 'ทำไม่ได้' เป็นคำว่า 'ยังทำไม่ได้ในตอนนี้'", "โฟกัสที่ความพยายามระหว่างทาง มากกว่าเน้นแต่เกรดหรือผลลัพธ์สุดท้าย"];
+            } else {
+                storyBgClass = "bg-mixed";
+                storyText1 = "ความเสี่ยงที่คำนวณมาอย่างดี... ผสมผสานกับการเรียนรู้ใหม่ๆ...";
+                storyText2 = "ความสมดุล... คือกุญแจสู่การอยู่รอดในทุกมิติของชีวิต...";
+                emoji = "⚖️"; title = "Mixed / Balanced"; sub = "นักสมดุลแห่งความเป็นจริง"; rarityText = "🏅 พบได้ทั่วไป";
+                desc = "คุณเป็นส่วนผสมระหว่างการพัฒนาตัวเอง และการหลีกเลี่ยงความเสี่ยง เช่น ในเรื่องที่คุณถนัดคุณจะเปิดรับเต็มที่ แต่กับเรื่องใหม่ๆ คุณอาจจะถอยหนีตั้งแต่แรก";
+                strengthArr = ["มีเหตุมีผล รู้ว่าเมื่อไหร่ควรลุย หรือเมื่อไหร่ควรถอย", "ประเมินความสามารถตัวเองได้แม่นยำ ไม่อีโก้จัด", "บริหารความเสี่ยงเก่งมาก"];
+                weaknessArr = ["การตีกรอบความสนใจแค่เรื่องเดิมๆ ทำให้พลาดโอกาสหรือสกิลใหม่ในระยะยาว", "อาจจะสับสนสไตล์ตัวเองในบางเวลา เมื่อเจอการเปลี่ยนแปลงกะทันหัน"];
+                adviceArr = ["ลองหยิบจับงานอดิเรกนอกเหนือความสนใจเดิมๆ สัก 1 อย่าง", "ลดการตั้งกำแพงเมื่อจำเป็นต้องเรียนสกิลที่คุณมองว่า 'ไม่ใช่ทาง'", "เชื่อมั่นในศักยภาพสมองตัวเองให้มากขึ้น ว่าคุณฝึกดัดนิสัยได้"];
+            }
+
+            // Set UI
+            document.getElementById('res-emoji').textContent = emoji;
+            document.getElementById('res-title').textContent = title;
+            document.getElementById('res-subtitle').textContent = sub;
+            document.getElementById('res-rarity').textContent = rarityText;
+            document.getElementById('res-desc').textContent = desc;
+
+            const ulS = document.getElementById('res-strengths');
+            ulS.innerHTML = strengthArr.map(s => `<li>${s}</li>`).join('');
+
+            const ulW = document.getElementById('res-weakness');
+            ulW.innerHTML = weaknessArr.map(w => `<li>${w}</li>`).join('');
+
+            const ulA = document.getElementById('res-advice');
+            ulA.innerHTML = adviceArr.map(a => `<li>${a}</li>`).join('');
+
+            // Careers Match
+            const cList = CAREERS.map(c => {
+                // Calculate match via distance formula
+                // Target profile vs User Profile (gPct)
+                const targetPct = c.gWeight * 100;
+                let diff = Math.abs(gPct - targetPct);
+                let match = 100 - diff;
+                return { ...c, match: match > 0 ? match : 0 };
+            });
+            cList.sort((a, b) => b.match - a.match);
+            const top3 = cList.slice(0, 3); // Top 3 to fit IG layout better
+
+            const cGrid = document.getElementById('res-careers');
+            cGrid.innerHTML = top3.map(c => {
+                return `
+                <div class="career-card">
+                    <div class="career-icon">${c.icon}</div>
+                    <div class="career-info">
+                        <div class="career-name">${c.name}</div>
+                        <div class="career-reason">${c.desc}</div>
+                        <div class="career-match-bar" style="margin-top: 5px;">
+                            <div class="career-match-fill" style="width: ${c.match}%"></div>
+                        </div>
+                    </div>
+                    <div style="font-weight:700; color:var(--primary); font-size:0.9rem">${Math.round(c.match)}%</div>
+                </div>
+                `;
+            }).join('');
+
+            // Set UI specific properties
+            document.getElementById('bar-growth').style.width = `${gPct}%`;
+            document.getElementById('bar-fixed').style.width = `${fPct}%`;
+
+            // Save for replay
+            currentStoryData = { storyBgClass, storyText1, storyText2, gPct, fPct };
+            
+            // Prepare Story Animation System
+            playStoryAnimation();
+        }
+
+        let currentStoryData = null;
+
+        function playStoryAnimation() {
+            if (!currentStoryData) return;
+            const { storyBgClass, storyText1, storyText2, gPct, fPct } = currentStoryData;
+
+            showScreen('screen-result');
+            
+            const overlay = document.getElementById('story-overlay');
+            const bg = document.getElementById('story-bg');
+            const p1 = document.getElementById('story-text-1');
+            const p2 = document.getElementById('story-text-2');
+            const flash = document.getElementById('story-flash');
+            const card = document.getElementById('capture-card');
+            
+            // Setup Text and BG
+            bg.className = "story-bg " + storyBgClass;
+            p1.textContent = storyText1;
+            p2.textContent = storyText2;
+            
+            // Reset state
+            overlay.classList.remove('hidden');
+            card.classList.remove('revealed');
+            p1.classList.remove('visible');
+            p2.classList.remove('visible');
+            bg.style.opacity = '0';
+
+            // Reset Counters to 0 before replay
+            document.getElementById("res-txt-f").innerText = "0";
+            document.getElementById("res-txt-g").innerText = "0";
+            document.getElementById("lbl-growth-num").innerText = "0";
+            document.getElementById("lbl-fixed-num").innerText = "0";
+            
+            playSound('gacha-build'); // Dramatic build up (5.5s)
+
+            // Sequence Timing
+            setTimeout(() => p1.classList.add('visible'), 500);
+            
+            setTimeout(() => {
+                p2.classList.add('visible');
+                bg.style.opacity = '1'; // Fade in background theme
+            }, 2500);
+
+            setTimeout(() => {
+                // Flash transition
+                flash.classList.add('flash');
+                playSound('success');
+                
+                setTimeout(() => {
+                    overlay.classList.add('hidden');
+                    flash.classList.remove('flash');
+                    
+                    // Reveal Card Stagger Sequence
+                    setTimeout(() => {
+                        card.classList.add('revealed');
+                        // Counters
+                        setTimeout(() => {
+                            animateValue("res-txt-f", 0, fPct, 1500);
+                            animateValue("res-txt-g", 0, gPct, 1500);
+                            animateValue("lbl-growth-num", 0, gPct, 1500);
+                            animateValue("lbl-fixed-num", 0, fPct, 1500);
+                        }, 500);
+                    }, 100);
+                }, 800); // flash hold duration
+            }, 5500); // full story sequence duration
+        }
+
+        /* =======================================
+           7. MODALS & UTILS
+           ======================================= */
+        function openModal(id) {
+            playSound('click');
+            if (menuOpen) toggleMenu();
+            document.getElementById(id).classList.add('active');
+        }
+
+        function closeModal(id) {
+            playSound('click');
+            document.getElementById(id).classList.remove('active');
+        }
+
+        function switchTab(id, btn) {
+            playSound('click');
+            const nav = btn.parentElement;
+            const modalNav = nav.parentElement;
+
+            nav.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            modalNav.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+
+            btn.classList.add('active');
+            document.getElementById(id).classList.add('active');
+        }
+
+        function toggleTheme(isDark) {
+            SETTINGS.theme = isDark ? 'dark' : 'light';
+            applySettings();
+        }
+
+        function toggleTimerSetting(val) { SETTINGS.timer = val; }
+        function toggleSound(val) { SETTINGS.sound = val; }
+        function changeSpeed(val) { SETTINGS.speed = val; applySettings(); }
+
+        function resetSettings() {
+            SETTINGS.theme = 'dark';
+            SETTINGS.timer = false;
+            SETTINGS.sound = true;
+            SETTINGS.speed = 1;
+            SETTINGS.animStyle = 'slide';
+            SETTINGS.bgStyle = 'none';
+            SETTINGS.uiStyle = 'flat';
+            applySettings();
+            playSound('click');
+        }
+
+        // Custom Dialog Box
+        let dialogCb = null;
+        function openDialog(title, desc, confirmCallback) {
+            playSound('click');
+            document.getElementById('dialog-title').textContent = title;
+            document.getElementById('dialog-desc').textContent = desc;
+            document.getElementById('custom-dialog').classList.add('active');
+            dialogCb = confirmCallback;
+        }
+
+        function closeDialog() {
+            playSound('click');
+            document.getElementById('custom-dialog').classList.remove('active');
+            dialogCb = null;
+        }
+
+        document.getElementById('dialog-confirm').addEventListener('click', () => {
+            if (dialogCb) dialogCb();
+            closeDialog();
+        });
+
+        function confirmRestart() {
+            if (menuOpen) toggleMenu();
+            openDialog("เริ่มใหม่ทั้งหมด?", "ข้อมูลคะแนนของคุณจะหายไปนะ", () => {
+                showScreen('screen-start');
+            });
+        }
+
+        // Export & Export Image
+        async function exportResult() {
+            playSound('click');
+            const card = document.getElementById('capture-card');
+            // Hide bottom buttons temporarily for clean screenshot
+            const actions = card.querySelector('.actions-group');
+            actions.style.display = 'none';
+
+            try {
+                // Wait small delay for rendering to settle
+                await new Promise(r => setTimeout(r, 100));
+
+                const canvas = await html2canvas(card, {
+                    scale: 2,
+                    backgroundColor: SETTINGS.theme === 'dark' ? '#1a1a2e' : '#ffffff',
+                    useCORS: true
+                });
+
+                const link = document.createElement('a');
+                link.download = 'mindset-result.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            } catch (err) {
+                alert('เกิดข้อผิดพลาดในการบันทึกรูปภาพ : ' + err.message);
+            } finally {
+                actions.style.display = 'grid'; // restore
+            }
+        }
+
+        function copyResultLink() {
+            playSound('click');
+            const pctText1 = document.getElementById('lbl-growth-pct').textContent;
+            const pctText2 = document.getElementById('lbl-fixed-pct').textContent;
+            const title = document.getElementById('res-title').textContent;
+            const textToCopy = `ลองเล่นควิซสำรวจตัวเองดูสิ!\nผลการทดสอบของฉันคือ ${title}\n[ ${pctText1} | ${pctText2} ]\nสนใจเล่นบ้าง คลิก >> [URL ของคุณ]`;
+
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                alert('คัดลอกข้อตวามสรุปผลเรียบร้อยแล้ว!');
+            }).catch(err => {
+                alert('ไม่สามารถคัดลอกได้ ระบบอาจไม่รองรับ');
+            });
+        }
+
+        // Initialize App
+        window.addEventListener('DOMContentLoaded', () => {
+            applySettings();
+            // Start at Home
+            showScreen('screen-start');
+        });
+
+    </script>
+</body>
+
+</html>
