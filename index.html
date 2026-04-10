@@ -2574,7 +2574,7 @@
             let fPct = 100 - gPct;
 
             // Condition logic
-            let title, sub, emoji, desc, strengthArr, weaknessArr, adviceArr, rarityText, shareCaption, shareTags;
+            let title, sub, emoji, desc, strengthArr, weaknessArr, adviceArr, rarityText, shareCaption, shareTags, dominantType;
             let storyBgClass, storyText1, storyText2;
 
             if (gPct >= 80) {
@@ -2588,6 +2588,7 @@
                 adviceArr = ["เว้นระยะให้ตัวเองพักเหนื่อยบ้าง ความสำเร็จไม่จำเป็นต้องรีบเสมอไป", "ระวังการด่วนตัดสินใจคนที่เรียนรู้ช้ากว่า พยายามเข้าใจจังหวะของคนอื่น", "ฉลองเป้าหมายเล็กๆ (Small wins) รอดูกระบวนการมากกว่าตัวเลขอาร์โอไอผลลัพธ์"];
                 shareCaption = "ฉันคือสายเติบโตเต็มพิกัด เปลี่ยนความท้าทายให้เป็นพลัง และไม่หยุดอัปเกรดตัวเอง";
                 shareTags = ["Growth ระดับสูง", "ใจนักพัฒนา", "แรงบันดาลใจทีม"];
+                dominantType = "Growth";
             } else if (gPct >= 60) {
                 storyBgClass = "bg-growth";
                 storyText1 = "โลกกว้างใบนี้... ยังมีอะไรให้ไขว่คว้าอีกมาก...";
@@ -2599,6 +2600,7 @@
                 adviceArr = ["โฟกัสที่การเติบโตของตัวเองเทียบกับเมื่อวานก็พอ เลิกมองคนอื่น", "กล้าที่จะลองทำสิ่งที่เสี่ยงกว่าที่เป็นอยู่", "หา Mentor เก่งๆ ไว้คอยชี้แนะ จะช่วยให้คุณก้าวเร็วขึ้นและมั่นใจ"];
                 shareCaption = "ฉันเป็นสายเติบโตแบบมั่นคง เปิดใจเรียนรู้ พร้อมพัฒนาตัวเองให้ดีขึ้นทุกช่วงเวลา";
                 shareTags = ["Growth เด่น", "เรียนรู้ต่อเนื่อง", "พลังบวกชัดเจน"];
+                dominantType = "Growth";
             } else if (fPct >= 60) {
                 storyBgClass = "bg-fixed";
                 storyText1 = "ข้อมูลต้องแม่นยำ... ความเป็นไปได้ต้องจับต้องได้ 100%...";
@@ -2610,6 +2612,7 @@
                 adviceArr = ["อนุญาตให้ตัวเองทำพลาดได้บ้าง ความผิดพลาดคือการเรียนรู้", "เปลี่ยนคำว่า 'ทำไม่ได้' เป็นคำว่า 'ยังทำไม่ได้ในตอนนี้'", "โฟกัสที่ความพยายามระหว่างทาง มากกว่าเน้นแต่เกรดหรือผลลัพธ์สุดท้าย"];
                 shareCaption = "ฉันเป็นสายรอบคอบ วางแผนเก่ง มั่นคงน่าเชื่อถือ และกำลังเติบโตในจังหวะที่เหมาะกับตัวเอง";
                 shareTags = ["Fixed เด่น", "วางแผนเป็นระบบ", "เสถียรภาพสูง"];
+                dominantType = "Fixed";
             } else {
                 storyBgClass = "bg-mixed";
                 storyText1 = "ความเสี่ยงที่คำนวณมาอย่างดี... ผสมผสานกับการเรียนรู้ใหม่ๆ...";
@@ -2621,10 +2624,10 @@
                 adviceArr = ["ลองหยิบจับงานอดิเรกนอกเหนือความสนใจเดิมๆ สัก 1 อย่าง", "ลดการตั้งกำแพงเมื่อจำเป็นต้องเรียนสกิลที่คุณมองว่า 'ไม่ใช่ทาง'", "เชื่อมั่นในศักยภาพสมองตัวเองให้มากขึ้น ว่าคุณฝึกดัดนิสัยได้"];
                 shareCaption = "ฉันคือสายสมดุล รู้จังหวะเดินหน้าและพักอย่างพอดี ใช้เหตุผลและความยืดหยุ่นได้ดี";
                 shareTags = ["Balanced เด่น", "ยืดหยุ่นสูง", "คิดเป็นระบบ"];
+                dominantType = "Balanced";
             }
 
             // Set UI
-            const dominantType = gPct > fPct ? 'Growth' : (fPct > gPct ? 'Fixed' : 'Balanced');
             const resultTheme = dominantType === 'Growth' ? 'theme-growth' : (dominantType === 'Fixed' ? 'theme-fixed' : 'theme-balanced');
             const resultCard = document.getElementById('capture-card');
             resultCard.classList.remove('theme-growth', 'theme-fixed', 'theme-balanced');
