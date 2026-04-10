@@ -1567,10 +1567,11 @@
             </div>
             <div class="setting-row">
                 <span>เสียงเอฟเฟกต์ (Sound)</span>
-                <label class="switch">
-                    <input type="checkbox" id="set-sound" checked onchange="toggleSound(this.checked)">
-                    <span class="slider"></span>
-                </label>
+                <div style="display: flex; align-items: center; gap: 10px; min-width: 180px;">
+                    <input type="range" id="set-sound" min="0" max="100" step="1" value="100"
+                        oninput="changeSoundVolume(this.value)">
+                    <span id="set-sound-label">100%</span>
+                </div>
             </div>
             <div class="setting-row" style="flex-direction: column; align-items: flex-start; gap: 8px;">
                 <span>สไตล์ลูกเล่น (Animation Style)</span>
@@ -2005,7 +2006,7 @@
            ======================================= */
         let audioCtx;
         function playSound(type) {
-            if (!SETTINGS.sound) return;
+            if (SETTINGS.soundVolume <= 0) return;
             try {
                 if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
                 if (audioCtx.state === 'suspended') audioCtx.resume();
@@ -2014,13 +2015,14 @@
                 const gain = audioCtx.createGain();
                 osc.connect(gain);
                 gain.connect(audioCtx.destination);
+                const volume = SETTINGS.soundVolume / 100;
 
                 if (type === 'click') {
                     // Soft pop
                     osc.type = 'sine';
                     osc.frequency.setValueAtTime(400, audioCtx.currentTime);
                     osc.frequency.exponentialRampToValueAtTime(800, audioCtx.currentTime + 0.05);
-                    gain.gain.setValueAtTime(0.5, audioCtx.currentTime);
+                    gain.gain.setValueAtTime(0.5 * volume, audioCtx.currentTime);
                     gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
                     osc.start();
                     osc.stop(audioCtx.currentTime + 0.1);
@@ -2030,7 +2032,7 @@
                     osc.frequency.setValueAtTime(600, audioCtx.currentTime);
                     osc.frequency.setValueAtTime(800, audioCtx.currentTime + 0.1);
                     osc.frequency.setValueAtTime(1200, audioCtx.currentTime + 0.2);
-                    gain.gain.setValueAtTime(0.6, audioCtx.currentTime);
+                    gain.gain.setValueAtTime(0.6 * volume, audioCtx.currentTime);
                     gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.6);
                     osc.start();
                     osc.stop(audioCtx.currentTime + 0.6);
@@ -2040,7 +2042,7 @@
                     osc.frequency.setValueAtTime(50, audioCtx.currentTime);
                     osc.frequency.exponentialRampToValueAtTime(800, audioCtx.currentTime + 5.5);
                     gain.gain.setValueAtTime(0, audioCtx.currentTime);
-                    gain.gain.linearRampToValueAtTime(0.2, audioCtx.currentTime + 5.0);
+                    gain.gain.linearRampToValueAtTime(0.2 * volume, audioCtx.currentTime + 5.0);
                     gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 5.5);
                     osc.start();
                     osc.stop(audioCtx.currentTime + 5.5);
@@ -2063,7 +2065,7 @@
         const SETTINGS = {
             theme: 'dark',
             timer: false,
-            sound: true,
+            soundVolume: 100,
             speed: 1, // 0=fast, 1=normal, 2=slow
             animStyle: 'slide',
             bgStyle: 'none',
@@ -2091,7 +2093,8 @@
             document.body.setAttribute('data-theme', SETTINGS.theme);
             document.getElementById('set-theme').checked = SETTINGS.theme === 'dark';
             document.getElementById('set-timer').checked = SETTINGS.timer;
-            document.getElementById('set-sound').checked = SETTINGS.sound;
+            document.getElementById('set-sound').value = SETTINGS.soundVolume;
+            document.getElementById('set-sound-label').textContent = `${SETTINGS.soundVolume}%`;
             document.getElementById('set-speed').value = SETTINGS.speed;
 
             const animSelect = document.getElementById('set-anim-style');
@@ -2573,13 +2576,16 @@
         }
 
         function toggleTimerSetting(val) { SETTINGS.timer = val; }
-        function toggleSound(val) { SETTINGS.sound = val; }
+        function changeSoundVolume(val) {
+            SETTINGS.soundVolume = Number(val);
+            document.getElementById('set-sound-label').textContent = `${SETTINGS.soundVolume}%`;
+        }
         function changeSpeed(val) { SETTINGS.speed = val; applySettings(); }
 
         function resetSettings() {
             SETTINGS.theme = 'dark';
             SETTINGS.timer = false;
-            SETTINGS.sound = true;
+            SETTINGS.soundVolume = 100;
             SETTINGS.speed = 1;
             SETTINGS.animStyle = 'slide';
             SETTINGS.bgStyle = 'none';
