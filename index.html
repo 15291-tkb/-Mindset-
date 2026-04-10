@@ -774,6 +774,13 @@
         }
 
         #screen-result .card-container {
+            --result-accent-a: rgba(16, 185, 129, 0.2);
+            --result-accent-b: rgba(59, 130, 246, 0.2);
+            --result-glow: rgba(124, 58, 237, 0.2);
+            --result-hero-border: rgba(148, 163, 184, 0.2);
+            --result-hero-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
+            --result-share-bg: linear-gradient(140deg, rgba(59, 130, 246, 0.2), rgba(16, 185, 129, 0.2));
+            --result-share-border: rgba(125, 211, 252, 0.45);
             max-width: 420px;
             /* Thinner for IG story ratio */
             padding: 0;
@@ -796,13 +803,43 @@
             mix-blend-mode: screen;
         }
 
+        #capture-card.theme-growth {
+            --result-accent-a: rgba(16, 185, 129, 0.24);
+            --result-accent-b: rgba(56, 189, 248, 0.2);
+            --result-glow: rgba(45, 212, 191, 0.22);
+            --result-hero-border: rgba(16, 185, 129, 0.35);
+            --result-hero-bg: linear-gradient(135deg, rgba(16, 185, 129, 0.16), rgba(56, 189, 248, 0.08));
+            --result-share-bg: linear-gradient(140deg, rgba(16, 185, 129, 0.28), rgba(56, 189, 248, 0.18));
+            --result-share-border: rgba(16, 185, 129, 0.55);
+        }
+
+        #capture-card.theme-fixed {
+            --result-accent-a: rgba(239, 68, 68, 0.18);
+            --result-accent-b: rgba(245, 158, 11, 0.24);
+            --result-glow: rgba(251, 113, 133, 0.22);
+            --result-hero-border: rgba(251, 113, 133, 0.35);
+            --result-hero-bg: linear-gradient(135deg, rgba(251, 113, 133, 0.14), rgba(245, 158, 11, 0.1));
+            --result-share-bg: linear-gradient(140deg, rgba(251, 113, 133, 0.24), rgba(245, 158, 11, 0.24));
+            --result-share-border: rgba(251, 113, 133, 0.5);
+        }
+
+        #capture-card.theme-balanced {
+            --result-accent-a: rgba(139, 92, 246, 0.2);
+            --result-accent-b: rgba(59, 130, 246, 0.2);
+            --result-glow: rgba(96, 165, 250, 0.24);
+            --result-hero-border: rgba(96, 165, 250, 0.35);
+            --result-hero-bg: linear-gradient(135deg, rgba(139, 92, 246, 0.14), rgba(59, 130, 246, 0.1));
+            --result-share-bg: linear-gradient(140deg, rgba(139, 92, 246, 0.22), rgba(59, 130, 246, 0.2));
+            --result-share-border: rgba(96, 165, 250, 0.5);
+        }
+
         .result-capture-area {
             background: var(--card-bg);
             padding: 30px 20px;
             position: relative;
             background-image:
-                radial-gradient(circle at 5% 10%, rgba(16, 185, 129, 0.2) 0%, transparent 30%),
-                radial-gradient(circle at 95% 20%, rgba(59, 130, 246, 0.2) 0%, transparent 35%),
+                radial-gradient(circle at 5% 10%, var(--result-accent-a) 0%, transparent 30%),
+                radial-gradient(circle at 95% 20%, var(--result-accent-b) 0%, transparent 35%),
                 linear-gradient(180deg, rgba(15, 23, 42, 0.98) 0%, rgba(15, 15, 26, 0.95) 55%, rgba(2, 6, 23, 0.98) 100%);
         }
 
@@ -813,7 +850,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-image: radial-gradient(circle at top, rgba(124, 58, 237, 0.2), transparent 60%);
+            background-image: radial-gradient(circle at top, var(--result-glow), transparent 60%);
             z-index: 0;
         }
 
@@ -831,13 +868,14 @@
         .result-content {
             position: relative;
             z-index: 1;
+            display: grid;
+            gap: 12px;
         }
 
         .hero-section {
             text-align: center;
-            margin-bottom: 20px;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
-            border: 1px solid rgba(148, 163, 184, 0.2);
+            background: var(--result-hero-bg);
+            border: 1px solid var(--result-hero-border);
             border-radius: 16px;
             padding: 16px 12px;
             backdrop-filter: blur(4px);
@@ -888,7 +926,11 @@
 
         /* Dual Progress / Spectrum */
         .spectrum-container {
-            margin-bottom: 25px;
+            margin-bottom: 0;
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            background: rgba(15, 23, 42, 0.46);
         }
 
         .spectrum-bar {
@@ -937,12 +979,47 @@
         }
 
         .share-highlight {
-            background: linear-gradient(140deg, rgba(59, 130, 246, 0.2), rgba(16, 185, 129, 0.2));
-            border: 1px solid rgba(125, 211, 252, 0.45);
+            background: var(--result-share-bg);
+            border: 1px solid var(--result-share-border);
             border-radius: 14px;
             padding: 15px;
-            margin-bottom: 16px;
+            margin-bottom: 0;
             box-shadow: 0 8px 20px rgba(2, 6, 23, 0.25);
+        }
+
+        .result-kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 8px;
+        }
+
+        .result-kpi-card {
+            border-radius: 12px;
+            border: 1px solid rgba(148, 163, 184, 0.25);
+            background: rgba(15, 23, 42, 0.55);
+            padding: 10px 8px;
+            text-align: center;
+        }
+
+        .result-kpi-label {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+
+        .result-kpi-value {
+            font-size: 1.05rem;
+            font-weight: 800;
+            line-height: 1.1;
+            color: var(--text-main);
+        }
+
+        .result-kpi-value.g {
+            color: #34d399;
+        }
+
+        .result-kpi-value.f {
+            color: #fb7185;
         }
 
         .share-highlight-title {
@@ -1006,7 +1083,7 @@
             border: 1px solid rgba(148, 163, 184, 0.2);
             border-radius: 12px;
             padding: 15px;
-            margin-bottom: 12px;
+            margin-bottom: 0;
             box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
         }
 
@@ -1353,6 +1430,10 @@
             .result-title {
                 font-size: 1.8rem;
             }
+
+            .result-kpi-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
         /* Alert Dialog (Custom Confirm) */
@@ -1572,8 +1653,22 @@
                         </div>
 
                         <!-- A. Identity summary -->
-                        <div style="text-align: center; margin-bottom: 20px; font-size: 1.1rem; font-weight: 700;" class="text-gradient res-full-width">
-                            DNA ความคิดของคุณ: Growth <span id="res-txt-g">0</span>% • Fixed <span id="res-txt-f">0</span>%
+                        <div style="text-align: center; font-size: 0.92rem; font-weight: 700;" class="text-gradient res-full-width">
+                            ลายเซ็นความคิดของคุณ
+                        </div>
+                        <div class="result-kpi-grid res-full-width">
+                            <div class="result-kpi-card">
+                                <div class="result-kpi-label">Growth</div>
+                                <div class="result-kpi-value g"><span id="res-txt-g">0</span>%</div>
+                            </div>
+                            <div class="result-kpi-card">
+                                <div class="result-kpi-label">Fixed</div>
+                                <div class="result-kpi-value f"><span id="res-txt-f">0</span>%</div>
+                            </div>
+                            <div class="result-kpi-card">
+                                <div class="result-kpi-label">สไตล์เด่น</div>
+                                <div class="result-kpi-value" id="res-dominant">-</div>
+                            </div>
                         </div>
 
                         <div class="share-highlight res-full-width">
@@ -2525,11 +2620,18 @@
             }
 
             // Set UI
+            const dominantType = gPct > fPct ? 'Growth' : (fPct > gPct ? 'Fixed' : 'Balanced');
+            const resultTheme = dominantType === 'Growth' ? 'theme-growth' : (dominantType === 'Fixed' ? 'theme-fixed' : 'theme-balanced');
+            const resultCard = document.getElementById('capture-card');
+            resultCard.classList.remove('theme-growth', 'theme-fixed', 'theme-balanced');
+            resultCard.classList.add(resultTheme);
+
             document.getElementById('res-emoji').textContent = emoji;
             document.getElementById('res-title').textContent = title;
             document.getElementById('res-subtitle').textContent = sub;
             document.getElementById('res-rarity').textContent = rarityText;
             document.getElementById('res-desc').textContent = desc;
+            document.getElementById('res-dominant').textContent = dominantType;
             document.getElementById('res-share-caption').textContent = shareCaption;
             document.getElementById('res-share-tags').innerHTML = shareTags.map(tag => {
                 const modeClass = tag.includes('Growth') ? 'g' : (tag.includes('Fixed') ? 'f' : 'mix');
@@ -2619,6 +2721,7 @@
             document.getElementById("res-txt-g").innerText = "0";
             document.getElementById("lbl-growth-num").innerText = "0";
             document.getElementById("lbl-fixed-num").innerText = "0";
+            document.getElementById("res-dominant").innerText = "-";
             
             playSound('gacha-build'); // Dramatic build up (5.5s)
 
@@ -2793,6 +2896,11 @@
 
             const gPct = Math.max(0, Math.min(100, Number(params.get('g')) || 0));
             const fPct = Math.max(0, Math.min(100, Number(params.get('f')) || 0));
+            const dominantType = gPct > fPct ? 'Growth' : (fPct > gPct ? 'Fixed' : 'Balanced');
+            const resultTheme = dominantType === 'Growth' ? 'theme-growth' : (dominantType === 'Fixed' ? 'theme-fixed' : 'theme-balanced');
+            const card = document.getElementById('capture-card');
+            card.classList.remove('theme-growth', 'theme-fixed', 'theme-balanced');
+            card.classList.add(resultTheme);
 
             document.getElementById('res-title').textContent = title;
             document.getElementById('res-subtitle').textContent = subtitle;
@@ -2802,6 +2910,7 @@
             document.getElementById('res-txt-f').textContent = fPct;
             document.getElementById('lbl-growth-num').textContent = gPct;
             document.getElementById('lbl-fixed-num').textContent = fPct;
+            document.getElementById('res-dominant').textContent = dominantType;
             document.getElementById('bar-growth').style.width = `${gPct}%`;
             document.getElementById('bar-fixed').style.width = `${fPct}%`;
             document.getElementById('res-share-caption').textContent = summary;
@@ -2816,7 +2925,6 @@
                 descEl.textContent = 'นี่คือผลลัพธ์ที่ถูกแชร์จากเพื่อนของคุณ ลองทำแบบทดสอบเพื่อรับคำแนะนำเฉพาะตัวของคุณเอง';
             }
 
-            const card = document.getElementById('capture-card');
             const overlay = document.getElementById('story-overlay');
             overlay.classList.add('hidden');
             card.classList.add('revealed');
