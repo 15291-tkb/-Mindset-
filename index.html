@@ -904,6 +904,61 @@
             font-weight: 600;
         }
 
+        .share-highlight {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.14), rgba(16, 185, 129, 0.14));
+            border: 1px solid rgba(59, 130, 246, 0.35);
+            border-radius: 14px;
+            padding: 14px;
+            margin-bottom: 14px;
+        }
+
+        .share-highlight-title {
+            font-weight: 800;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+            color: var(--text-main);
+        }
+
+        .share-highlight-caption {
+            color: var(--text-main);
+            font-size: 0.95rem;
+            line-height: 1.55;
+            margin-bottom: 10px;
+        }
+
+        .share-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .share-tag {
+            border-radius: 999px;
+            padding: 4px 10px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--border-color);
+        }
+
+        .share-tag.g {
+            color: #10b981;
+            border-color: rgba(16, 185, 129, 0.45);
+            background: rgba(16, 185, 129, 0.12);
+        }
+
+        .share-tag.f {
+            color: #ef4444;
+            border-color: rgba(239, 68, 68, 0.45);
+            background: rgba(239, 68, 68, 0.12);
+        }
+
+        .share-tag.mix {
+            color: #60a5fa;
+            border-color: rgba(96, 165, 250, 0.45);
+            background: rgba(96, 165, 250, 0.12);
+        }
+
         .color-g {
             color: #10b981;
         }
@@ -1485,6 +1540,12 @@
                         <!-- A. Identity summary -->
                         <div style="text-align: center; margin-bottom: 20px; font-size: 1.1rem; font-weight: 700;" class="text-gradient res-full-width">
                             มี Fixed <span id="res-txt-f">0</span>% และ Growth <span id="res-txt-g">0</span>%
+                        </div>
+
+                        <div class="share-highlight res-full-width">
+                            <div class="share-highlight-title">📣 โหมดน่าแชร์ของคุณ</div>
+                            <div class="share-highlight-caption" id="res-share-caption">กำลังวิเคราะห์สไตล์การเติบโตของคุณ...</div>
+                            <div class="share-tags" id="res-share-tags"></div>
                         </div>
 
                         <!-- E. Mindset Compatibility (Dual Bar) -->
@@ -2380,7 +2441,7 @@
             let fPct = 100 - gPct;
 
             // Condition logic
-            let title, sub, emoji, desc, strengthArr, weaknessArr, adviceArr, rarityText;
+            let title, sub, emoji, desc, strengthArr, weaknessArr, adviceArr, rarityText, shareCaption, shareTags;
             let storyBgClass, storyText1, storyText2;
 
             if (gPct >= 80) {
@@ -2392,6 +2453,8 @@
                 strengthArr = ["เรียนรู้เร็ว ไม่หยุดนิ่ง", "ปรับตัวเก่งในสถานการณ์วิกฤต", "เป็นแรงบันดาลใจให้คนรอบข้างบ่อยๆ"];
                 weaknessArr = ["บางครั้งคุณกดดันตัวเองมากไปจนลืมพักผ่อน", "จู้จี้หรือคาดหวังสูงกับเพื่อนร่วมงานโดยไม่รู้ตัว"];
                 adviceArr = ["เว้นระยะให้ตัวเองพักเหนื่อยบ้าง ความสำเร็จไม่จำเป็นต้องรีบเสมอไป", "ระวังการด่วนตัดสินใจคนที่เรียนรู้ช้ากว่า พยายามเข้าใจจังหวะของคนอื่น", "ฉลองเป้าหมายเล็กๆ (Small wins) รอดูกระบวนการมากกว่าตัวเลขอาร์โอไอผลลัพธ์"];
+                shareCaption = "ฉันเป็นสายพัฒนาตัวเองแบบสุดพลัง ชอบเรียนรู้ ชอบลอง และพร้อมเติบโตทุกวัน";
+                shareTags = ["Growth สูงมาก", "พลังบวก", "กล้าลองสิ่งใหม่"];
             } else if (gPct >= 60) {
                 storyBgClass = "bg-growth";
                 storyText1 = "โลกกว้างใบนี้... ยังมีอะไรให้ไขว่คว้าอีกมาก...";
@@ -2401,6 +2464,8 @@
                 strengthArr = ["เปิดรับคำวิจารณ์เพื่อนำมาพัฒนา", "ไม่ยอมแพ้เมื่อเจอโจทย์ที่ยากลิบลิ่ว", "มีความสัมพันธ์ที่ดีกับเพื่อนร่วมงานเพราะอีโก้ต่ำ"];
                 weaknessArr = ["ลึกๆ คุณยังเผลอเปรียบเทียบตัวเองกับคนอื่นทำให้ไขว้เขว", "บางทีก็หมดพลังงานง่ายๆ ถ้าเจอเสียงวิจารณ์ที่รุนแรงเกินไป"];
                 adviceArr = ["โฟกัสที่การเติบโตของตัวเองเทียบกับเมื่อวานก็พอ เลิกมองคนอื่น", "กล้าที่จะลองทำสิ่งที่เสี่ยงกว่าที่เป็นอยู่", "หา Mentor เก่งๆ ไว้คอยชี้แนะ จะช่วยให้คุณก้าวเร็วขึ้นและมั่นใจ"];
+                shareCaption = "ฉันเป็นสายเติบโตแบบบาลานซ์ เปิดใจเรียนรู้และพร้อมค่อยๆ อัปเกรดตัวเองให้ดีขึ้น";
+                shareTags = ["Growth เด่น", "ใจเปิดรับ", "พัฒนาต่อเนื่อง"];
             } else if (fPct >= 60) {
                 storyBgClass = "bg-fixed";
                 storyText1 = "ข้อมูลต้องแม่นยำ... ความเป็นไปได้ต้องจับต้องได้ 100%...";
@@ -2410,6 +2475,8 @@
                 strengthArr = ["มีความเสถียร ซื่อตรงต่อกฎเกณฑ์", "ตรวจสอบอย่างรอบคอบก่อนลงมือทำเสมอ", "มีความรับผิดชอบสูงในงานรูทีนที่คุ้นเคย"];
                 weaknessArr = ["ปฏิเสธโอกาสดีๆ เพียงเพราะกลัวทำออกมาไม่เพอร์เฟกต์", "มองปัญหาว่าเป็นข้อจำกัดที่ข้ามไม่ได้ และเสียกำลังใจเร็ว"];
                 adviceArr = ["อนุญาตให้ตัวเองทำพลาดได้บ้าง ความผิดพลาดคือการเรียนรู้", "เปลี่ยนคำว่า 'ทำไม่ได้' เป็นคำว่า 'ยังทำไม่ได้ในตอนนี้'", "โฟกัสที่ความพยายามระหว่างทาง มากกว่าเน้นแต่เกรดหรือผลลัพธ์สุดท้าย"];
+                shareCaption = "ฉันเป็นสายมั่นคง วางแผนดี รอบคอบ และพร้อมพัฒนาแบบค่อยเป็นค่อยไปในจังหวะที่ใช่";
+                shareTags = ["Fixed เด่น", "คิดรอบคอบ", "มั่นคงน่าเชื่อถือ"];
             } else {
                 storyBgClass = "bg-mixed";
                 storyText1 = "ความเสี่ยงที่คำนวณมาอย่างดี... ผสมผสานกับการเรียนรู้ใหม่ๆ...";
@@ -2419,6 +2486,8 @@
                 strengthArr = ["มีเหตุมีผล รู้ว่าเมื่อไหร่ควรลุย หรือเมื่อไหร่ควรถอย", "ประเมินความสามารถตัวเองได้แม่นยำ ไม่อีโก้จัด", "บริหารความเสี่ยงเก่งมาก"];
                 weaknessArr = ["การตีกรอบความสนใจแค่เรื่องเดิมๆ ทำให้พลาดโอกาสหรือสกิลใหม่ในระยะยาว", "อาจจะสับสนสไตล์ตัวเองในบางเวลา เมื่อเจอการเปลี่ยนแปลงกะทันหัน"];
                 adviceArr = ["ลองหยิบจับงานอดิเรกนอกเหนือความสนใจเดิมๆ สัก 1 อย่าง", "ลดการตั้งกำแพงเมื่อจำเป็นต้องเรียนสกิลที่คุณมองว่า 'ไม่ใช่ทาง'", "เชื่อมั่นในศักยภาพสมองตัวเองให้มากขึ้น ว่าคุณฝึกดัดนิสัยได้"];
+                shareCaption = "ฉันเป็นสายสมดุล รู้จังหวะเดินหน้าและถอยอย่างพอดี จัดการชีวิตได้ยืดหยุ่น";
+                shareTags = ["บาลานซ์ดี", "ยืดหยุ่น", "คิดเป็นระบบ"];
             }
 
             // Set UI
@@ -2427,6 +2496,12 @@
             document.getElementById('res-subtitle').textContent = sub;
             document.getElementById('res-rarity').textContent = rarityText;
             document.getElementById('res-desc').textContent = desc;
+            document.getElementById('res-share-caption').textContent = shareCaption;
+            document.getElementById('res-share-tags').innerHTML = shareTags.map(tag => {
+                const modeClass = tag.includes('Growth') ? 'g' : (tag.includes('Fixed') ? 'f' : 'mix');
+                return `<span class="share-tag ${modeClass}">${tag}</span>`;
+            }).join('');
+            currentShareText = shareCaption;
 
             const ulS = document.getElementById('res-strengths');
             ulS.innerHTML = strengthArr.map(s => `<li>${s}</li>`).join('');
@@ -2478,6 +2553,7 @@
         }
 
         let currentStoryData = null;
+        let currentShareText = '';
 
         function playStoryAnimation() {
             if (!currentStoryData) return;
@@ -2653,10 +2729,11 @@
 
         function copyResultLink() {
             playSound('click');
-            const pctText1 = document.getElementById('lbl-growth-pct').textContent;
-            const pctText2 = document.getElementById('lbl-fixed-pct').textContent;
+            const growthPct = document.getElementById('lbl-growth-num').textContent;
+            const fixedPct = document.getElementById('lbl-fixed-num').textContent;
             const title = document.getElementById('res-title').textContent;
-            const textToCopy = `ลองเล่นควิซสำรวจตัวเองดูสิ!\nผลการทดสอบของฉันคือ ${title}\n[ ${pctText1} | ${pctText2} ]\nสนใจเล่นบ้าง คลิก >> [URL ของคุณ]`;
+            const shareSummary = currentShareText || 'มาลองเช็กสไตล์การเติบโตของตัวเองกัน';
+            const textToCopy = `ผล Mindset ของฉัน: ${title}\nGrowth ${growthPct}% | Fixed ${fixedPct}%\n${shareSummary}\n#Mindset #GrowthMindset #แบบทดสอบสนุกๆ`;
 
             navigator.clipboard.writeText(textToCopy).then(() => {
                 alert('คัดลอกข้อตวามสรุปผลเรียบร้อยแล้ว!');
